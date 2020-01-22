@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Theme CSS navbarBO #}
+    <link href="{{ asset('css/navbarBO.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/projectBO.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+    {# Navigation BackOffice #}
+    {% include 'admin/backoffice/_navBackOffice.html.twig' %}
+
+    <!-- Masthead -->
+    <header class="mastheadBO bg-dark">
+        {# Messages Flash #}
+        {% include '_messageFlash.html.twig' %}
+
+        {% if projects %}
+            <div class="container d-flex flex-wrap justify-content-around">
+            {% for project in projects %}
+                    <div class="card mb-4">
+                        <div class="card-img-top"
+                             style="background-image: url('{{ asset('img/portfolio/'~ project.files) }}');"
+                             title="{{ project.infoShort }}"></div>
+                        <div class="card-body">
+                            <h5 class="card-title border-bottom border-dark">{{ project.name|upper }}</h5>
+                            <h6 class="border-bottom border-dark">{{ project.type|capitalize }} <small>{{ project.category|capitalize }}</small></h6>
+                            <p class="card-text" style="font-size: .8rem;">{{ project.infoLong }}</p>
+                            <div class="buttons">
+                                <a href="{{ path('app_admin_project_editprojet', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen"></i></a>
+                                <a href="{{ path('app_admin_project_deleteprojet', {'id':project.id}) }}"
+                                   class="btn btn-danger text-white"><i class="far fa-trash-alt"
+                                   onclick="return(confirm('Etes-vous sûr de vouloir supprimer le projet {{ project.name }} ?'))"></i></a>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+            </div>
+            <div style="height:70px"></div>
+        {% else %}
+            <div class="container h-100">
+                <div class="row h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-10 align-self-end">
+                        <h2 class="text-uppercase text-white font-weight-bold">Projets
+                            {% if nameType %}
+                                {{ nameType.name }}
+                            {% endif %}
+                        </h2>
+                        <hr class="divider my-4">
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                        <a class="btn btn-sm btn-primary" href="{{ path('app_admin_project_editprojet') }}">Créer un projet</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </header>
+
+{% endblock %}

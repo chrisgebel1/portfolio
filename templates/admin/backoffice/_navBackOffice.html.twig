@@ -1,0 +1,43 @@
+{# Navigation BackOffice #}
+<nav class="navbar second-navbar navbar-expand-lg bg-primary navbar-dark fixed-top py-lg-0 py-sm-2">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="{{ path('app_admin_backoffice_index') }}#page-top">BackOffice</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar2">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar2">
+            <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                <li class="nav-item">
+                    <a href="{{ path('app_admin_user_index') }}" class="nav-link js-scroll-trigger">User</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link {#dropdown-toggle#}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Projets
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-BO dropdown-menu-right">
+                        {% if types %}
+                            {% for type in types %}
+                                <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index', {'type':type.id}) }}">{{ type.name|capitalize }}</a>
+                            {% endfor %}
+                        {% endif %}
+
+{#                        <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index', {'type':}) }}">Web</a>#}
+{#                        <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index') }}">Print</a>#}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_editprojet') }}">Ajouter</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link {#dropdown-toggle#}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-BO dropdown-menu-right">
+                            <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_section_section') }}">Rubriques</a>
+                            <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_backoffice_prefs') }}">Préférences</a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>

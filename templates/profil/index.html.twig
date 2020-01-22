@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+        {% block stylesheets %}
+            {{ parent() }}
+            {# Theme CSS perso #}
+            <link href="{{ asset('css/MyStyle_UserProfil.css')}}" rel="stylesheet">
+        {% endblock %}
+
+{% block body %}
+
+    <!-- Masthead -->
+    <header class="masthead mastheadSimple Merriweather">
+        <div class="container h-100">
+            <div class="row h-100 a align-items-sm-start align-items-md-center">
+                <div class="col-12 col-lg-6 mx-auto text-center">
+                        <div class="silhouette-profil mx-auto mb-4"></div>
+                        <h2 class="text-uppercase text-white font-weight-bold">{{ app.user.pseudo }}</h2>
+                        <hr class="divider my-4">
+                </div>
+                <div class="col-12 col-lg-6 mx-auto text-center">
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Modifier son profil
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <div class="card bg-dark card-body">
+                                        <h6 class="text-primary">Modifier le profil</h6>
+                                        <div class="mt-4">
+                                            {{ form_start(formInfos) }}
+                                            {{ form_widget(formInfos.pseudo, {'attr': {'class': 'mb-3'}}) }}
+                                            {{ form_end(formInfos) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Modifier son mot de passe
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <div class="card bg-dark card-body">
+                                        <h6 class="text-primary">Changer le mot de passe</h6>
+                                        <div class="mt-4">
+                                            {{ form_start(formPassword) }}
+                                            {{ form_widget(formPassword.oldPassword, {'attr': {'class': 'mb-3'}}) }}
+                                            {{ form_widget(formPassword.plainpassword.first, {'attr': {'class': 'mb-3'}}) }}
+                                            {{ form_widget(formPassword.plainpassword.second, {'attr': {'class': 'mb-3'}}) }}
+                                            {{ form_end(formPassword) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if app.session.flashbag.all %}
+                    <div class="col-12">
+                        {# Messages Flash #}
+                        {% include '_messageFlash.html.twig' %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+{% endblock %}

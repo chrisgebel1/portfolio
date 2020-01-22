@@ -1,0 +1,154 @@
+body {
+	position: relative;
+}
+.Merriweather {
+	font-family: "Merriweather Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+/* navbar principale \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
+#mainNav {
+	z-index: 2 !important;
+}
+#mainNav .dropdown-menu {
+	font-size: .9rem;
+}
+#mainNav .fa-lock-open, #mainNav .fa-lock {
+	transform: translateY(-2px);
+}
+/* FIN navbar principale \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
+
+/* navbar backOffice \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
+.second-navbar {
+	z-index: 1;
+}
+.navbar.second-navbar {
+	margin-top: 72px;
+	font-family: "Merriweather Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+	font-weight: 700;
+	font-size: .8rem;
+}
+
+.navbar .navbar-brand {
+	color: rgba(255,255,255,.7);
+}
+
+.navbar.navbar-brand:hover {
+	color:  white;
+}
+/* FIN navbar backOffice \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
+
+
+.portrait {
+	width: 215px;
+	height: 215px;
+	border-radius: 100%;
+	/* border: 1px solid rgba(255, 255, 255, .1); */
+	background: url("../img/portrait/portrait_srgb@0,5x.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-size: cover;
+
+	-moz-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+	-webkit-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+	-o-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+	box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+	filter:progid:DXImageTransform.Microsoft.Shadow(color=rgba(255, 255, 255, .2), Direction=NaN, Strength=10);
+}
+
+.silhouette-profil {
+	/*width: 75px;*/
+	/*height: 75px;*/
+	width: 215px;
+	height: 215px;
+
+	border-radius: 100%;
+	position:relative;
+
+	-moz-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+	-webkit-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+	-o-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+	box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+	filter:progid:DXImageTransform.Microsoft.Shadow(color=rgba(255, 255, 255, .2), Direction=NaN, Strength=10);
+}
+.silhouette-profil:before {
+	position: absolute;
+	/*top: -20px;*/
+	/*font-size: 77px;*/
+
+	top: -57px;
+	font-size: 221px;
+
+	left: 0;
+	font-family: "Font Awesome 5 Free";
+	content: "\f2bd";
+	color: white;
+	opacity: 50%;
+
+}
+
+/* section formation \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
+#collapseWF3 .bg-card {
+	/* opacity: .5; */
+	background-color: rgb(244, 98, 58);
+}
+
+#collapseWF3 p {
+	font-size: .8rem;
+}
+/* FIN section formation \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
+
+a, a:hover, a:focus {
+	text-decoration: none !important;
+}
+
+.card {
+	border: 1px solid rgba(255,255,255, .5);
+}
+
+.op50 {
+	opacity: .75;
+}
+
+form label {
+	color: white;
+}
+
+header.mastheadBO, header.mastheadSimple {
+	padding-top: 0rem;
+	/*padding-bottom: calc(10rem - 72px);*/
+	/*height: calc(100vh - 115px);*/
+	min-height:100vh;
+}
+
+table {
+	font-size: .8rem;
+	font-family: "Merriweather Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+/* formulaire files */
+.custom-file label {
+	text-align: left;
+}
+
+/* card project */
+.card-text, .card .btn {
+	font-size: .8rem;
+}
+
+.card {
+	background-color: rgba(255, 255, 255, 0.75);
+}
+
+footer {
+	border-color: rgba(52, 58, 64, 0.51) !important
+}
+
+
+@media only screen and (max-width: 992px) {
+	/* smartphone */
+	header.mastheadBO, header.mastheadSimple {
+		padding-top: 10rem;
+	}
+
+}

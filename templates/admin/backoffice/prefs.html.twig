@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Theme CSS navbarBO #}
+    <link href="{{ asset('css/navbarBO.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+    {# Navigation BackOffice #}
+    {% include 'admin/backoffice/_navBackOffice.html.twig' %}
+
+    <!-- Masthead -->
+    <header class="mastheadBO bg-dark h-100">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-10 align-self-center">
+                <h2 class="text-uppercase text-white font-weight-bold">Préférences</h2>
+                <hr class="divider my-4">
+            </div>
+            <div class="col-lg-8 align-self-baseline">
+
+            </div>
+        </div>
+    </header>
+
+{% endblock %}

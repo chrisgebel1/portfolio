@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Theme CSS navbarBO #}
+    <link href="{{ asset('css/navbarBO.css')}}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+    {# Navigation BackOffice #}
+    {% include 'admin/backoffice/_navBackOffice.html.twig' %}
+
+    <!-- Masthead -->
+    <header class="mastheadBO bg-dark Merriweather">
+        {# Messages Flash #}
+        {% include '_messageFlash.html.twig' %}
+
+
+        {% if userEdit is defined %}
+            <div class="container">
+                <div class="col-lg-8 align-self-baseline mx-auto">
+                    {{ form_start(formEdit) }}
+                        {{ form_row(formEdit.pseudo) }}
+                        {{ form_row(formEdit.role) }}
+                        <div class="form-group mb-4 mt-2 text-center">
+                            <button type="submit" class="btn btn-primary">Modifier</button>
+                        </div>
+                    {{ form_end(formEdit) }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="container">
+            <table class="table table-stripped bg-secondary col-lg-8 col-12 mx-auto">
+                <thead class="bg-light text-dark">
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th>Pseudo</th>
+                        <th>Rôle</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if users|length > 0 %}
+                    {% for user in users %}
+                        <tr class="text-center text-white">
+                            <td class="align-middle">{{ user.id }}</td>
+                            <td class="align-middle">{{ user.pseudo }}</td>
+                            <td class="align-middle">
+                                {% if user.role == 'ROLE_ADMIN' %}
+                                    <span class="text-dark">Admin</span>
+                                {% elseif user.role == 'ROLE_USER' %}
+                                    <span>Utilisateur</span>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle"><a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="text-white">Modifier</a></td>
+                            {% if user.role == 'ROLE_ADMIN' and user.id == app.user.id %}
+                                <td class="align-middle op50">Supprimer</td>
+                            {% else %}
+                                <td class="align-middle"><a href="{{ path('app_admin_user_delete', {'id': user.id}) }}" class="text-white" onclick="return(confirm('Etes-vous sûr de vouloir supprimer l\'utilisateur {{ user.pseudo }} ?'))">Supprimer</a></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr class="text-center">
+                        <td class="text-center" colspan="5">Il n'y a pas d'utilisateurs inscrits.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </header>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+    </script>
+{% endblock %}

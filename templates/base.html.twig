@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Christophe GEBELIN{% endblock %}</title>
+        {% block stylesheets %}
+            {# fonteawsome #}
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet" >
+
+            {# Google Fonts #}
+            <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet">
+            <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+
+            {# Plugin CSS #}
+            <link href="{{ asset('vendor/magnific-popup/magnific-popup.css') }}" rel="stylesheet">
+
+            {# Theme CSS - Includes Bootstrap #}
+            <link href="{{ asset('css/creative.min.css') }}" rel="stylesheet">
+
+            {# Theme CSS perso #}
+            <link href="{{ asset('css/myStyle.css')}}" rel="stylesheet">
+
+        {% endblock %}
+    </head>
+    <body id="page-top">
+
+    {# Navigation #}
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 Merriweather" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="{{ path('app_index_index') }}#page-top">Christophe GEBELIN</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="{{ path('app_index_index') }}#formation">Formations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="{{ path('app_index_index') }}#competence">Compétences</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="{{ path('app_index_index') }}#experience">Expérience Pro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="{{ path('app_index_index') }}#portfolio">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="{{ path('app_index_index') }}#contact">Contact</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link {#dropdown-toggle#}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <i class="fas fa-lock-open"></i>
+                            {% else %}
+                                <i class="fas fa-lock"></i>
+                            {% endif %}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right text-right">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %} {# si un utilisateur est connecté #}
+                                <a class="dropdown-item" href="{{ path('app_profil_index') }}">Profil</a>
+                                <a class="dropdown-item" href="{{ path('app_inscription_logout') }}">Déconnexion</a>
+                            {% else %} {# si aucun utilisateur n'est connecté #}
+                                <a class="dropdown-item" href="{{ path('app_inscription_login') }}">Connexion</a>
+                                <a class="dropdown-item" href="{{ path('app_inscription_index') }}">Inscription</a>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ path('app_admin_backoffice_index') }}">BackOffice</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+            {% block body %}
+            {% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-light py-3 footer fixed-bottom border-top">
+        <div class="container">
+            <div class="small text-center text-muted">Copyright &copy; {{ "now"|date("Y") }} - Christophe GEBELIN</div>
+        </div>
+    </footer>
+
+
+        {% block javascripts %}
+            {# Bootstrap core JavaScript #}
+            <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+            {# Plugin JavaScript #}
+            <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+            <script src="{{ asset('vendor/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+
+            {# Custom scripts for this template #}
+            <script src="{{ asset('js/creative.min.js') }}"></script>
+
+            {# My scripts for this template #}
+            <script src="{{ asset('js/myScript.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>

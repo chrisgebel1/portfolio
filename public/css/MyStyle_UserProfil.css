@@ -1,0 +1,38 @@
+@media only screen and (max-width: 767px) {
+    /* smartphone */
+
+    h2 {
+        font-size: 25px;
+    }
+
+    .silhouette-profil {
+        width: 75px;
+        height: 75px;
+        /*width: 215px;*/
+        /*height: 215px;*/
+
+        border-radius: 100%;
+        position:relative;
+
+        -moz-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+        -webkit-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+        -o-box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+        box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, .2);
+        filter:progid:DXImageTransform.Microsoft.Shadow(color=rgba(255, 255, 255, .2), Direction=NaN, Strength=10);
+    }
+    .silhouette-profil:before {
+        position: absolute;
+        top: -20px;
+        font-size: 77px;
+
+        /*top: -57px;*/
+        /*font-size: 221px;*/
+
+        left: 0;
+        font-family: "Font Awesome 5 Free";
+        content: "\f2bd";
+        color: white;
+        opacity: 50%;
+
+    }
+}

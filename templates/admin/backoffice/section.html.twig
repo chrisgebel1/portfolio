@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Theme CSS navbarBO #}
+    <link href="{{ asset('css/navbarBO.css')}}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+    {# Navigation BackOffice #}
+    {% include 'admin/backoffice/_navBackOffice.html.twig' %}
+
+    <!-- Masthead -->
+    <header class="mastheadBO bg-dark">
+        {# Messages Flash #}
+        {% include '_messageFlash.html.twig' %}
+
+        {# section Category #}
+        <div>
+            <table class="table table-stripped bg-secondary col-lg-8 col-12 mx-auto">
+                <thead class="bg-light text-dark">
+                <tr class="text-center">
+                    <th>Catégorie</th>
+                    <th>Type</th>
+                    <th colspan="2" class="text-right"><a href="{{ path('app_admin_section_editcategory') }}">Ajouter</a></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if categories|length > 0 %}
+                    {% for categorie in categories %}
+                        <tr class="text-center text-white">
+                            <td class="align-middle">{{ categorie.name }}</td>
+                            <td class="align-middle">{{ categorie.type.name }}</td>
+                            <td class="align-middle"><a href="{{ path('app_admin_section_editcategory', {'id': categorie.id}) }}" class="text-white">Modifier</a></td>
+                            <td class="align-middle"><a href="{{ path('app_admin_section_deletecategory', {'id': categorie.id}) }}" class="text-white" onclick="return(confirm('Etes-vous sûr de vouloir supprimer la categorie {{ categorie.name }} ?'))">Supprimer</a></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr class="text-center">
+                        <td class="text-center" colspan="5">Il n'existe pas encore de catégorie.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        {# section Type #}
+        <div>
+            <table class="table table-stripped bg-secondary col-lg-8 col-12 mx-auto">
+                <thead class="bg-light text-dark">
+                <tr class="text-center">
+                    <th>Type</th>
+                    <th colspan="2" class="text-right"><a href="{{ path('app_admin_section_edittype') }}">Ajouter</a></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if types|length > 0 %}
+                    {% for type in types %}
+                        <tr class="text-center text-white">
+                            <td class="align-middle">{{ type.name }}</td>
+                            <td class="align-middle"><a href="{{ path('app_admin_section_edittype', {'id': type.id} ) }}" class="text-white">Modifier</a></td>
+                            <td class="align-middle"><a href="{{ path('app_admin_section_deletetype', {'id':type.id} ) }}" class="text-white" onclick="return(confirm('Etes-vous sûr de vouloir supprimer la categorie {{ type.name }} ?'))">Supprimer</a></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr class="text-center">
+                        <td class="text-center" colspan="5">Il n'existe pas encore de type.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+    </header>
+
+{% endblock %}

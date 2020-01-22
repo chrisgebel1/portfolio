@@ -1,0 +1,12 @@
+.dropdown-menu-BO {
+    width: auto;
+}
+
+.dropdown-item-BO {
+    font-size: .8rem;
+    text-align: right;
+}
+
+header.mastheadBO, header.mastheadSimple {
+    padding-top: 10rem;
+}

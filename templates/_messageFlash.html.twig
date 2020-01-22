@@ -1,0 +1,17 @@
+{#{% if app.session.flashbag.all %}#}
+<div class="form-group col-lg-8 col-12 mx-auto">
+    {# affiche des messages flash #}
+    {% for type, messages in app.session.flashbag.all  %}
+        {% for message in messages %}
+            {# pour la classe alert-danger bootstrap #}
+            {% if type == 'error' %}
+                {% set type = 'danger' %}
+            {% endif %}
+            <div class="alert alert-{{ type }} text-center" style="font-size: .8rem;">
+                {{ message|raw }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+{#{% endif %}#}
+
