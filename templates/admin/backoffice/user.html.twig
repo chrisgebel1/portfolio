@@ -30,13 +30,17 @@
                 </div>
             </div>
         {% endif %}
-        <div class="container">
+        <div class="{# container #} mx-lg-0 mx-2">
             <table class="table table-stripped bg-secondary col-lg-8 col-12 mx-auto">
                 <thead class="bg-light text-dark">
                     <tr class="text-center">
-                        <th>ID</th>
-                        <th>Pseudo</th>
-                        <th>Rôle</th>
+                        <th class="align-middle">ID</th>
+                        <th class="align-middle">Pseudo</th>
+                        <th class="align-middle">Rôle</th>
+                        <th class="align-middle">Date d'inscription</th>
+                        <th class="align-middle">dernier login</th>
+                        <th class="align-middle">dernier logout</th>
+                        <th class="align-middle">durée de connexion</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -54,6 +58,10 @@
                                     <span>Utilisateur</span>
                                 {% endif %}
                             </td>
+                            <td class="align-middle">{{ user.dateRegistration|date('d/m/Y') }}</td>
+                            <td class="align-middle">{{ user.lastLogin|date('d/m/Y H:i') }}</td>
+                            <td class="align-middle">{{ user.lastLogOut|date('d/m/Y H:i') }}</td>
+                            <td class="align-middle">{{ user.connectionTime }}</td>
                             <td class="align-middle"><a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="text-white">Modifier</a></td>
                             {% if user.role == 'ROLE_ADMIN' and user.id == app.user.id %}
                                 <td class="align-middle op50">Supprimer</td>

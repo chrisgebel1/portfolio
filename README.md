@@ -21,7 +21,9 @@ Enfin, pour gérer le site une entité USER existe :<br>
   => nom<br>
   => mot de passe<br>
   => role (ROLE_USER par défaut)<br>
-  => date de d'enregistrement/inscription<br>
+  => date d'enregistrement/inscription<br>
+  => date de dernier login<br>
+  => date de dernier logout<br>
 <br>
 Un espace back-office existe afin d'avoir accès à la partie administration et création des projets grâce au ROLE_ADMIN.<br>
 En tant que simple ROLE_USER, il est simplement possible de modifier son nom et son mot de passe.<br>

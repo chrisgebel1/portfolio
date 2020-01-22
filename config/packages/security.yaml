@@ -28,6 +28,7 @@ security:
             # route de la page de deconnexion
             logout:
                 path: app_inscription_logout
+                handlers: [App\EventListener\LogoutListener]
 
             # provider défini au-dessus dans la section providers
             provider: app_user_provider

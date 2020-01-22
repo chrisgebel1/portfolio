@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -64,6 +65,16 @@ class User implements UserInterface
      */
     private $dateRegistration;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastLogin;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastLogOut;
+
 
     public function __construct()
     {
@@ -87,8 +98,6 @@ class User implements UserInterface
         $this->plainPassword = $plainPassword;
         return $this;
     }
-
-
 
     public function getId(): ?int
     {
@@ -192,4 +201,71 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * @param mixed $lastLogin
+     * @return User
+     */
+    public function setLastLogin($lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastLogOut()
+    {
+        return $this->lastLogOut;
+    }
+
+    /**
+     * @param mixed $lastLogOut
+     * @return User
+     */
+    public function setLastLogOut($lastLogOut)
+    {
+        $this->lastLogOut = $lastLogOut;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function connectionTime()
+    {
+        $lastLogin = $this->getLastLogin();
+        $lastlogout = $this->getLastLogOut();
+
+        if ( $lastLogin && $lastlogout )
+        {
+            $dif = $lastLogin->diff( $lastlogout );
+
+            if ($lastLogin > $lastlogout)
+                // lastLogout antérieur à lasLogin => utilisateur connecté mais pas déconnecté
+            {
+                return 'connecté(e)';
+            } else
+                // utilisateur déconnecté
+            {
+                $result = $dif->format('%i') <=1 ? 1 : $dif->format('%i');
+                return $result . ' minute(s)';
+            }
+        } else
+            // utilisateur uniquement inscrit mais jamais connecté,
+            // ou vient de se connecté pour la première fois mais pas encore déconnecté
+        {
+            return "-";
+        }
+    }
+
 }

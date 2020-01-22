@@ -17,7 +17,7 @@
                     <h2 class="text-uppercase text-white font-weight-bold">{{ app.user.pseudo }}</h2>
                     <hr class="divider my-4">
                     <p class="mt-lg-5 profil-info">Date d'enregistrement : {{ app.user.dateRegistration|date('d/m/Y H:i') }}</p>
-                    <p class="mb-5 profil-info">Date dernière connexion : {{ app.user.dateRegistration|date('d/m/Y H:i') }}</p>
+                    <p class="mb-5 profil-info">Date dernière connexion : {{ app.user.lastLogOut|date('d/m/Y H:i') }}</p>
                 </div>
                 <div class="col-12 col-lg-6 mx-auto text-center">
                     <div class="accordion" id="accordionExample">
