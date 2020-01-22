@@ -60,6 +60,17 @@ class User implements UserInterface
     private $plainPassword;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateRegistration;
+
+
+    public function __construct()
+    {
+        $this->setDateRegistration(new \DateTime());
+    }
+
+    /**
      * @return string
      */
     public function getPlainPassword(): ?string
@@ -168,5 +179,17 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getDateRegistration(): ?\DateTimeInterface
+    {
+        return $this->dateRegistration;
+    }
+
+    public function setDateRegistration(\DateTimeInterface $dateRegistration): self
+    {
+        $this->dateRegistration = $dateRegistration;
+
+        return $this;
     }
 }

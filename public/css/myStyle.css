@@ -84,7 +84,11 @@ body {
 	content: "\f2bd";
 	color: white;
 	opacity: 50%;
+}
 
+.profil-info {
+	color: white;
+	font-size: .9rem !important;
 }
 
 /* section formation \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
