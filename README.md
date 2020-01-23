@@ -28,6 +28,6 @@ Enfin, pour gérer le site une entité USER existe :<br>
 En tant que simple ROLE_USER, il est simplement possible de modifier son nom et son mot de passe.<br>
 <br>
 Un espace back-office réservé au ROLE_ADMIN existe afin d'avoir accès à la partie administration et création des projets.<br>
-  => affichage d'informations (nombre d'inscrits total et par role, nombre de projets total et par type)
+  => affichage d'informations (nombre d'inscrits total et pour chaque rôle; nombre de projets total et pour chaque type)
 <br>
 A la date du 20 janvier 2020, le site n'est pas encore en ligne.

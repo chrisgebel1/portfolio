@@ -15,14 +15,12 @@
                         Projets
                     </a>
                     <div class="dropdown-menu dropdown-menu-BO dropdown-menu-right">
+                        <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index') }}">Tous</a>
                         {% if types %}
                             {% for type in types %}
                                 <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index', {'type':type.id}) }}">{{ type.name|capitalize }}</a>
                             {% endfor %}
                         {% endif %}
-
-{#                        <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index', {'type':}) }}">Web</a>#}
-{#                        <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index') }}">Print</a>#}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_editprojet') }}">Ajouter</a>
                     </div>

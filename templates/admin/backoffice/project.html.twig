@@ -2,6 +2,10 @@
 
 {% block stylesheets %}
     {{ parent() }}
+
+    {# CSS lightbox #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
+
     {# Theme CSS navbarBO #}
     <link href="{{ asset('css/navbarBO.css')}}" rel="stylesheet">
     <link href="{{ asset('css/projectBO.css')}}" rel="stylesheet">
@@ -22,17 +26,19 @@
             <div class="container d-flex flex-wrap justify-content-around">
             {% for project in projects %}
                     <div class="card mb-4">
-                        <div class="card-img-top"
-                             style="background-image: url('{{ asset('img/portfolio/'~ project.files) }}');"
-                             title="{{ project.infoShort }}"></div>
+                        <div class="card-img-top">
+                            <a href="{{ asset('img/portfolio/'~ project.files) }}" data-toggle="lightbox" data-gallery="gallery">
+                                <img src="{{ asset('img/portfolio/'~ project.files) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}">
+                            </a>
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title border-bottom border-dark">{{ project.name|upper }}</h5>
                             <h6 class="border-bottom border-dark">{{ project.type|capitalize }} <small>{{ project.category|capitalize }}</small></h6>
                             <p class="card-text" style="font-size: .8rem;">{{ project.infoLong }}</p>
                             <div class="buttons">
-                                <a href="{{ path('app_admin_project_editprojet', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen"></i></a>
+                                <a href="{{ path('app_admin_project_editprojet', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen" title="modifier"></i></a>
                                 <a href="{{ path('app_admin_project_deleteprojet', {'id':project.id}) }}"
-                                   class="btn btn-danger text-white"><i class="far fa-trash-alt"
+                                   class="btn btn-danger text-white"><i class="far fa-trash-alt" title="supprimer"
                                    onclick="return(confirm('Etes-vous sûr de vouloir supprimer le projet {{ project.name }} ?'))"></i></a>
                             </div>
                         </div>
@@ -58,5 +64,20 @@
             </div>
         {% endif %}
     </header>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {# JS lightbox #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).on("click", '[data-toggle="lightbox"]', function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+    </script>
 
 {% endblock %}
