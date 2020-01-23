@@ -2,7 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Repository\ProjectRepository;
 use App\Repository\TypeRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,16 +19,39 @@ class BackofficeController extends AbstractController
     /**
      * @Route("/")
      */
-    public function index(TypeRepository $typeRepository)
+    public function index(
+        TypeRepository $typeRepository,
+        UserRepository $userRepository,
+        ProjectRepository $projectRepository)
     {
+        // pour la navbar BO
         $types = $typeRepository->findBy(
             [],
             ['id'=>'DESC']
         );
 
+        // pour les users
+        $users = $userRepository->findAll();
+        $roles = [];
+
+        foreach ($users as $user )
+        {
+            $role = $user->getRole();
+            if ( !in_array($role, $roles) )
+            {
+                array_push($roles, $user->getRole());
+            }
+        }
+
+        // pour les projets
+        $projects = $projectRepository->findAll();
+
         return $this->render('admin/backoffice/index.html.twig',
             [
-                'types' => $types
+                'types' => $types,
+                'projects' => $projects,
+                'roles' => $roles,
+                'users' => $users,
             ]
         );
     }

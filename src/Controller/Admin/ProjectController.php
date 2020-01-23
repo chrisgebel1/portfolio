@@ -38,13 +38,15 @@ class ProjectController extends AbstractController
             [],
             ['id'=>'DESC']
         );
-        $nameType = $typeRepository->find($type);
+
 
         if ( is_null($type) )
         {
+            $nameType = '';
             $projects = $projectRepository->findAll();
         } else
         {
+            $nameType = $typeRepository->find($type);
             $projects = $projectRepository->findBy(
                 ['type'=>$type],
                 ['type'=>'DESC']
