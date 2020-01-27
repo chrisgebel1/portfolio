@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class ProjectType extends AbstractType
 {
@@ -77,11 +78,13 @@ class ProjectType extends AbstractType
                  [
                      'data_class' => null,
                      'label' => 'Image',
-                     'required' => true,
-//                     'multiple' => true,
+//                     'required' => true,
+                     'multiple' => true, // pour pouvoir uploader plusieurs fichiers
+                     'mapped' => false, // pour pouvoir uploader plusieurs fichiers
                      'attr' => [
-//                         'placeholder' => 'Sélectionner un fichier'
-                     ]
+                         'placeholder' => 'Ajouter une ou plusieurs images',
+                         'title' => 'ne remplace pas la/les image(s)'
+                     ],
                  ]
              )
         ;
@@ -94,7 +97,7 @@ class ProjectType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Category::class,
-                    'required' => true,
+                    'required' => false,
                     'placeholder' => 'Choisir une catégorie',
                     'choices' => $categories,
                     'attr' =>

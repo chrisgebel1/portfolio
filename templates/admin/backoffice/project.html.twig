@@ -27,9 +27,17 @@
             {% for project in projects %}
                     <div class="card mb-4">
                         <div class="card-img-top">
-                            <a href="{{ asset('img/portfolio/'~ project.files) }}" data-toggle="lightbox" data-gallery="gallery">
-                                <img src="{{ asset('img/portfolio/'~ project.files) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}">
-                            </a>
+                            {% for file in project.files %}
+                                {% if file == project.files|first %}
+                                    <a href="{{ asset('img/portfolio/'~ file) }}" data-toggle="lightbox" data-gallery="gallery">
+                                        <img src="{{ asset('img/portfolio/'~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}">
+                                    </a>
+                                {% else %}
+                                    <a href="{{ asset('img/portfolio/'~ file) }}" data-toggle="lightbox" data-gallery="gallery">
+                                        <img src="{{ asset('img/portfolio/'~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="d-none">
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                         <div class="card-body">
                             <h5 class="card-title border-bottom border-dark">{{ project.name|upper }}</h5>

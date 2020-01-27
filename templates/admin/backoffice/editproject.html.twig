@@ -4,6 +4,9 @@
     {{ parent() }}
     {# Theme CSS navbarBO #}
     <link href="{{ asset('css/navbarBO.css')}}" rel="stylesheet">
+
+    {# CSS pour eidt project #}
+    <link href="{{ asset('css/editProjectBO.css')}}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -13,6 +16,9 @@
 
     <!-- Masthead -->
     <header class="mastheadBO bg-dark Merriweather">
+        {# Messages Flash #}
+        {% include '_messageFlash.html.twig' %}
+
 
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-center text-center">
@@ -30,7 +36,35 @@
                     </div>
 
                     {{ form_end(form) }}
-                </div>
+
+                    <div class="d-flex flex-wrap justify-content-start">
+                        {% if original_image %}
+                            <div class="p-1 w-100 mx-auto mb-3 mt-4 bg-primary rounded text-white">Image(s) du projet</div>
+                        {% for image in original_image %}
+                            {% if loop.last and loop.length > 1 %}
+                                {% set margeRight = "" %}
+                            {% else %}
+                                {% set margeRight = "mr-2" %}
+                            {% endif %}
+                                <div id="imageIndex{{ loop.index0 }}" class="container-delete {{ margeRight }}">
+                                    <a href="{{ path('app_admin_project_ajaxdeleteoneimageproject', {'id': project.id, 'img': loop.index0}) }}"
+                                       data-indexImage="{{ loop.index0 }}" class="delete-img-btn"
+                                       onclick="return(confirm('Etes-vous sûr de vouloir supprimer l\'image {{ loop.index }} ?'))">
+                                        <img src="{{ asset('img/portfolio/'~image) }}" alt="" width="125px" class="img-thumbnail deleteBtn" id="{{ loop.index0 }}">
+                                    <div class="delete-img-btn-legend h-100">
+                                        <p>Supprimer</p>
+                                    </div>
+                                    </a>
+                                </div>
+
+                        {% endfor %}
+                        {% else %}
+                            <div class="p-1 w-100 mx-auto mb-3 mt-4 bg-primary rounded text-white">Il n'y a pas d'image(s) pour ce projet</div>
+                        {% endif %}
+
+                    </div>
+
+            </div>
             </div>
         </div>
     </header>
@@ -41,8 +75,24 @@
     {{ parent() }}
 
     <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
-
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     {# My scripts for this template #}
     <script src="{{ asset('js/createProject.js') }}"></script>
+
+    {# rollover des vignettes suppmrimer image du projet #}
+    <script type="text/javascript">
+        $(document).ready( function(){
+            "use strict";
+
+            $(".container-delete").mouseenter( function (){
+                $(".delete-img-btn-legend",
+                    this).stop().animate({"top":"0%",}, 200, 'swing');
+            });
+            $(".container-delete").mouseleave( function (){
+                $(".delete-img-btn-legend",
+                    this).stop().animate({"top":"100%",}, 200, 'swing');
+            });
+        });
+    </script>
 
 {% endblock %}

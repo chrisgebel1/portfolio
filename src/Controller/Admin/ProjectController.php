@@ -2,13 +2,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
 use App\Entity\Project;
-use App\Entity\Type;
-use App\Form\CategoryProjectType;
 use App\Form\ProjectType;
-use App\Form\TypeProjectType;
-use App\Repository\CategoryRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,8 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class ProjectController
@@ -64,7 +61,7 @@ class ProjectController extends AbstractController
     }
 
 
-//    funtions pour les projets \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//    fonctions pour les projets \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     /**
      * @Route("/project/edit/{id}", defaults={"id"=null}, requirements={"id":"\d+"})
      */
@@ -82,6 +79,7 @@ class ProjectController extends AbstractController
         );
 
         $originalImage = null; // dans le cas de modification
+        $originalImages = null; // dans le cas de modification
 
         if ( is_null($id) ) // création
         {
@@ -98,12 +96,19 @@ class ProjectController extends AbstractController
             if ( !is_null($project->getFiles()) ) // si le projet à une image
             {
                 // nom du fichier venant de la BDD
-                $originalImage = $project->getFiles();
+                $originalImages = $project->getFiles();
+                // dump($originalImages);
 
+                $originalImagesToBDD = [];
+                foreach ($originalImages as $originalImage)
+                {
+                    array_push($originalImagesToBDD, new File($this->getParameter('upload_dir_portfolio') . $originalImage ));
+                }
+                // dump($originalImagesToBDD);die();
                 // on sette l'image avec un objet file sur l'emplacement de l'image
                 // pour le traitement par le formulaire
                 $project->setFiles(
-                    new File($this->getParameter('upload_dir_portfolio') . $originalImage )
+                    $originalImagesToBDD
                 );
             }
 
@@ -117,38 +122,67 @@ class ProjectController extends AbstractController
         {
             if ( $form->isValid() )
             {
-                // dump($request);die();
-                /** @var UploadedFile $image */
-                $image = $project->getFiles();
+                // dump($request);
+                $images = $request->files->get('project')['files'];
+                // dump($images);die();
 
-                if ( !is_null($image) )
+                if ( count($images) > 0 )
                 {
-                    // nom sous lequel l'image va être enregistrée
-                    $filename = uniqid() . '_' . strtoupper(str_replace(' ', '', $project->getName())) . '.' . $image->guessExtension();
+                    // array contenant le nom des fichiers uploadés dans la BDD
+                    $filenames = [];
 
-                    // déplace l'image uploadée
-                    $image->move(
-                    // vers le répertoire public/images
-                    // cf config/services.yaml
-                        $this->getParameter('upload_dir_portfolio'),
-                        // nom du fichier
-                        $filename
-                    );
+                    foreach ($images as $image)
+                    {
+                        // nom sous lequel l'image va être enregistrée
+                        /**
+                         * @var UploadedFile $image
+                         */
+                        $filename = uniqid() . '_' . strtoupper(str_replace(' ', '', $project->getName())) . '.' . $image->guessExtension();
+                        // dump($image->getMimeType());
+
+                        $acceptedImage = ['image/jpeg', 'image/png'];
+                        // si le fichier est une image de type jpeg ou png
+                        if ( in_array($image->getMimeType(), $acceptedImage) )
+                        {
+                            // déplace l'image uploadée
+                            $image->move(
+                            // vers le répertoire public/images
+                            // cf config/services.yaml
+                                $this->getParameter('upload_dir_portfolio'),
+                                // nom du fichier
+                                $filename
+                            );
+
+                            // ajoute le nom du fichier dans filenames
+                            array_push($filenames, $filename);
+
+                        } else {
+                            $this->addFlash('error', 'Seul les fichiers jpeg et png sont acceptés comme image');
+                            return $this->redirectToRoute('app_admin_project_editprojet');
+                        }
+
+                    }
 
                     // on sette l'attribut files du projet avec le nom du fichier
                     // pour l'enregistrement en BDD
-                    $project->setFiles($filename);
+                    $project->setFiles($filenames);
 
-                    // en modification on supprime l'ancienne image
-                    // s'il y a une nouvelle
-                    if ( !is_null($originalImage) )
+                    // en modification on ajoute la/les images dans la BDD
+                    // s'il y en a de nouvelle(s)
+                    if ( !is_null($originalImages) )
                     {
-                        unlink($this->getParameter('upload_dir_portfolio') . $originalImage );
+                        foreach ( $filenames as $filename)
+                        {
+                            array_push($originalImages, $filename);
+                        }
+                        $project->setFiles($originalImages);
                     }
+
+
                 } else {
                     // en modification, sans upload, on sette l'image
                     // avec le nom de l'ancienne
-                    $project->setFiles($originalImage);
+                    $project->setFiles($originalImages);
                 }
 
                 $entityManager->persist($project);
@@ -166,8 +200,9 @@ class ProjectController extends AbstractController
             'admin/backoffice/editproject.html.twig',
             [
                 'form' => $form->createView(),
-                'original_image' => $originalImage,
-                'types' => $types
+                'original_image' => $originalImages,
+                'types' => $types,
+                'project' => $project
             ]
         );
     }
@@ -183,11 +218,18 @@ class ProjectController extends AbstractController
         // si le projet supprimé a une image
         if ( !is_null($project->getFiles()) )
         {
-            $file = $this->getParameter('upload_dir_portfolio') . $project->getFiles();
+//            $file = $this->getParameter('upload_dir_portfolio') . $project->getFiles();
+            $filesDelete = $project->getFiles();
+//            dump($filesDelete);die();
 
-            if ( file_exists($file) )
+            foreach ($filesDelete as $file)
             {
-                unlink($file);
+                $file = $this->getParameter('upload_dir_portfolio') . $file;
+
+                if ( file_exists($file) )
+                {
+                    unlink($file);
+                }
             }
         }
 
@@ -197,5 +239,70 @@ class ProjectController extends AbstractController
 
         $this->addFlash('success', 'Le projet a été supprimé');
         return $this->redirectToRoute('app_admin_project_index');
+    }
+
+
+
+
+    /**
+     * @Route("/ajaxdeleteoneimageproject/{id}/img/{img}", requirements={"id":"\d+", "img":"\d+"})
+     */
+    public function ajaxDeleteOneImageProject(
+        EntityManagerInterface $entityManager,
+        ProjectRepository $projectRepository,
+        $id, $img): Response
+    {
+        $project = $projectRepository->find($id);
+        // dump($project);die();
+
+        if ( is_null($project) ) // si l'ID ne correspond pas à un projet existant
+        {
+            return $this->json([
+                'status'=> 403,
+                'message'=>'Projet inexistant',
+                'projet' => $id,
+                'image' => $img
+                ],403);
+        }
+
+        $images = $project->getFiles();
+        // dump($images);
+
+        if ( is_null($images[$img]) ) // si l'image n'existe pas
+        {
+            return $this->json([
+                'status'=> 403,
+                'message'=>'Image inexistante',
+                'projet' => $id,
+                'image' => $img
+            ], 403
+            );
+        } else // donc le projet et l'image à supprimée existent
+        {
+            // suppression du fichier de l'image
+                $file = $this->getParameter('upload_dir_portfolio') . $images[$img];
+                if ( file_exists($file) )
+                {
+                    unlink($file);
+                }
+
+            array_splice($images, $img, 1);
+            //dump($images);die();
+
+            $project->setFiles(
+                $images
+            );
+
+            $entityManager->persist($project);
+            $entityManager->flush();
+
+            return $this->json([
+                'status'=> 200,
+                'message'=>'Image supprimée',
+                'projet' => $id,
+                'image' => $img
+            ],200);
+        }
+
     }
 }

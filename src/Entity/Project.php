@@ -25,13 +25,7 @@ class Project
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\File(
-     *     maxSize="2M",
-     *     maxSizeMessage="La taille du fichier doit être inférieur à {{ limit }}{{ suffix}}",
-     *     mimeTypes={"image/jpeg", "image/png"},
-     *     mimeTypesMessage="Les types de fichier authorisés sont jpeg ou png"
-     * )
+     * @ORM\Column(type="array", length=255, nullable=true)
      */
     private $files;
 

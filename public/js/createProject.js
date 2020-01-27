@@ -50,6 +50,31 @@ $( document ).ready(function() {
     bsCustomFileInput.init()
     // FIN function pour le formulaire (INPUT FILE) \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+
+
+    // AJAX delete image \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    $('.delete-img-btn').each( function () {
+        $(this).click( function(e){
+            e.preventDefault();
+
+            const $indexImage = this.getAttribute('data-indexImage');
+            const $url = this.href;
+            console.log($indexImage);
+            console.log($url);
+
+            axios.get($url).then( function(response){
+                // console.log(response);
+                if ( response.status == 200 )
+                {
+                    $( "#imageIndex" + $indexImage ).remove();
+                }
+            });
+
+
+        } );
+    } )
+    // FIN AJAX delete image \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 });
 
 
