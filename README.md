@@ -9,7 +9,7 @@ Il est possible de rajouter et modifier des travaux (projets) en leur attribuant
   => nom de projet<br>
   => type de projet (Print/retouche ou Web)<br>
   => catégorie en fonction du type de projet<br>
-  => ajout d'une image ou plusieurs images<br>
+  => ajout d'une ou plusieurs images<br>
   => une description courte (attribut html alt et title)<br>
   => une description plus longue décrivant le projet<br>
   <br>
