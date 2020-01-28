@@ -86,11 +86,13 @@
 
             $(".container-delete").mouseenter( function (){
                 $(".delete-img-btn-legend",
-                    this).stop().animate({"top":"0%",}, 200, 'swing');
+                    // this).stop().animate({"top":"0%",}, 200, 'swing');
+                    this).stop().fadeTo(50, 1);
             });
             $(".container-delete").mouseleave( function (){
                 $(".delete-img-btn-legend",
-                    this).stop().animate({"top":"100%",}, 200, 'swing');
+                    // this).stop().animate({"top":"100%",}, 200, 'swing');
+                    this).stop().fadeTo(50, 0);
             });
         });
     </script>
