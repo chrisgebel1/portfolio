@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class BackofficeController
  * @package App\Controller\Admin
- * @Route("/backoffice")
+ * @Route("/")
  */
 class BackofficeController extends AbstractController
 {
@@ -46,7 +46,7 @@ class BackofficeController extends AbstractController
         // pour les projets
         $projects = $projectRepository->findAll();
 
-        return $this->render('admin/backoffice/index.html.twig',
+        return $this->render('admin/index.html.twig',
             [
                 'types' => $types,
                 'projects' => $projects,
@@ -67,7 +67,7 @@ class BackofficeController extends AbstractController
         );
 
         return $this->render(
-            'admin/backoffice/prefs.html.twig',
+            'admin/prefs.html.twig',
             [
                 'types' => $types
             ]

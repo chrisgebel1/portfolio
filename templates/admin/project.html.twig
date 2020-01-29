@@ -15,7 +15,7 @@
 {% block body %}
 
     {# Navigation BackOffice #}
-    {% include 'admin/backoffice/_navBackOffice.html.twig' %}
+    {% include 'admin/_navBackOffice.html.twig' %}
 
     <!-- Masthead -->
     <header class="mastheadBO bg-dark">
@@ -38,15 +38,16 @@
                                     </a>
                                 {% endif %}
                             {% endfor %}
+                            <div class="images-count Merriweather text-white" title="Nombre d'images du projet">{{ project.files|length }}</div>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title border-bottom border-dark">{{ project.name|upper }}</h5>
                             <h6 class="border-bottom border-dark">{{ project.type|capitalize }} <small>{{ project.category }}</small></h6>
                             <p class="card-text" style="font-size: .8rem;">{{ project.infoLong|raw }}</p>
                             <div class="buttons">
-                                <a href="{{ path('app_admin_project_editprojet', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen" title="modifier"></i></a>
+                                <a href="{{ path('app_admin_project_editprojet', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen" title="Modifier"></i></a>
                                 <a href="{{ path('app_admin_project_deleteprojet', {'id':project.id}) }}"
-                                   class="btn btn-danger text-white"><i class="far fa-trash-alt" title="supprimer"
+                                   class="btn btn-danger text-white"><i class="far fa-trash-alt" title="Supprimer"
                                    onclick="return(confirm('Etes-vous sûr de vouloir supprimer le projet {{ project.name }} ?'))"></i></a>
                             </div>
                         </div>

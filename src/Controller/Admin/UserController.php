@@ -30,7 +30,7 @@ class UserController extends AbstractController
         $users = $userRepository->findAll();
 
         return $this->render(
-            'admin/backoffice/user.html.twig',
+            'admin/user.html.twig',
             [
                 'users' => $users,
                 'types' => $types
@@ -88,7 +88,7 @@ class UserController extends AbstractController
         }
 
         return $this->render(
-          'admin/backoffice/user.html.twig',
+          'admin/user.html.twig',
           [
               'users' => $users,
               'userEdit' => $userEdit,

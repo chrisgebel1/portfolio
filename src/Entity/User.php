@@ -46,6 +46,11 @@ class User implements UserInterface
     private $role = 'ROLE_USER';
 
     /**
+     * @var array
+     */
+    private $rolesAccepted = ['ROLE_ADMIN', 'ROLE_USER'];
+
+    /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
@@ -157,6 +162,15 @@ class User implements UserInterface
         $this->role = $role;
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getRolesAccepted(): array
+    {
+        return $this->rolesAccepted;
+    }
+
 
     /**
      * @see UserInterface

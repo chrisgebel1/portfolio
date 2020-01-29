@@ -33,6 +33,7 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Type", inversedBy="category")
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $type;
 

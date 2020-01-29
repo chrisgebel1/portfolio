@@ -33,7 +33,7 @@ class SectionController extends AbstractController
         );
 
         return $this->render(
-            'admin/backoffice/section.html.twig',
+            'admin/section.html.twig',
             [
                 'categories' => $categories,
                 'types' => $types
@@ -88,7 +88,7 @@ class SectionController extends AbstractController
 
 
         return $this->render(
-            'admin/backoffice/type.html.twig',
+            'admin/type.html.twig',
             [
                 'form' => $form->createView(),
                 'types' => $types
@@ -176,7 +176,7 @@ class SectionController extends AbstractController
         }
 
         return $this->render(
-            'admin/backoffice/category.html.twig',
+            'admin/category.html.twig',
             [
                 'form' => $form->createView(),
                 'types' => $types

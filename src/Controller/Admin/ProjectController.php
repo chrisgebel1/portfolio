@@ -51,7 +51,7 @@ class ProjectController extends AbstractController
         }
 
 
-        return $this->render('admin/backoffice/project.html.twig',
+        return $this->render('admin/project.html.twig',
             [
                 'projects' => $projects,
                 'types' => $types,
@@ -63,7 +63,7 @@ class ProjectController extends AbstractController
 
 //    fonctions pour les projets \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     /**
-     * @Route("/project/edit/{id}", defaults={"id"=null}, requirements={"id":"\d+"})
+     * @Route("/edit/{id}", defaults={"id"=null}, requirements={"id":"\d+"})
      */
     public function editProjet(
         Request $request,
@@ -197,7 +197,7 @@ class ProjectController extends AbstractController
         }
 
         return $this->render(
-            'admin/backoffice/editproject.html.twig',
+            'admin/editproject.html.twig',
             [
                 'form' => $form->createView(),
                 'original_image' => $originalImages,
@@ -208,7 +208,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/project/delete/{id}", requirements={"id":"\d+"})
+     * @Route("/delete/{id}", requirements={"id":"\d+"})
      */
     public function deleteProjet(
         EntityManagerInterface $entityManager,

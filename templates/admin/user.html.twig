@@ -4,12 +4,13 @@
     {{ parent() }}
     {# Theme CSS navbarBO #}
     <link href="{{ asset('css/navbarBO.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/userBO.css')}}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
 
     {# Navigation BackOffice #}
-    {% include 'admin/backoffice/_navBackOffice.html.twig' %}
+    {% include 'admin/_navBackOffice.html.twig' %}
 
     <!-- Masthead -->
     <header class="mastheadBO bg-dark Merriweather">
@@ -41,7 +42,7 @@
                         <th class="align-middle">dernier login</th>
 {#                        <th class="align-middle">dernier logout</th>#}
                         <th class="align-middle">durée de connexion</th>
-                        <th></th>
+{#                        <th></th>#}
                         <th></th>
                     </tr>
                 </thead>
@@ -53,18 +54,29 @@
                             <td class="align-middle">{{ user.pseudo }}</td>
                             <td class="align-middle">
                                 {% if user.role == 'ROLE_ADMIN' %}
-                                    <span class="text-dark">Admin</span>
-                                {% elseif user.role == 'ROLE_USER' %}
-                                    <span>Utilisateur</span>
+                                    <span title="Vous ne pouvez pas modifier votre rôle">Admin</span>
+                                {% else %}
+                                    <form class="form-group">
+                                        <label for="{{ user.id }}"></label>
+                                        <select name="" id="{{ user.id }}" class="custom-select custom-select-sm role-select" data-role="{{ user.role }}">
+                                            {% for role in user.rolesAccepted %}
+                                                {% if role == user.role %}
+                                                    <option value="{{ role }}" class="text-center" selected="selected">{{ role|replace({'ROLE_':''})|capitalize }}</option>
+                                                {% else %}
+                                                    <option value="{{ role }}" class="text-center">{{ role|replace({'ROLE_':''})|capitalize }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </form>
                                 {% endif %}
                             </td>
                             <td class="align-middle">{{ user.dateRegistration|date('d/m/Y') }}</td>
                             <td class="align-middle">{{ user.lastLogin|date('d/m/Y H:i') }}</td>
 {#                            <td class="align-middle">{{ user.lastLogOut|date('d/m/Y H:i') }}</td>#}
                             <td class="align-middle">{{ user.connectionTime }}</td>
-                            <td class="align-middle"><a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="text-white">Modifier</a></td>
+{#                            <td class="align-middle"><a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="text-white">Modifier</a></td>#}
                             {% if user.role == 'ROLE_ADMIN' and user.id == app.user.id %}
-                                <td class="align-middle op50">Supprimer</td>
+                                <td class="align-middle op50"><span title="Vous ne pouvez pas supprimer votre propre compte">Supprimer</span></td>
                             {% else %}
                                 <td class="align-middle"><a href="{{ path('app_admin_user_delete', {'id': user.id}) }}" class="text-white" onclick="return(confirm('Etes-vous sûr de vouloir supprimer l\'utilisateur {{ user.pseudo }} ?'))">Supprimer</a></td>
                             {% endif %}
@@ -85,6 +97,5 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script type="text/javascript">
-    </script>
+    <script src="{{ asset('js/changeRole.js') }}"></script>
 {% endblock %}

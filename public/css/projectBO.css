@@ -6,6 +6,7 @@
 
 .card-img-top {
     box-shadow: 0 3px 15px rgba(52, 58, 64, .25);
+    position: relative; /* pour le nombre d'images du projet */
 }
 
 .card-img-top img {
@@ -40,4 +41,19 @@
 
 .buttons a:hover, .buttons a:focus {
     transform: translate3d(0, 1px, 0);
+}
+
+
+/* pour l'indication du nbre d'images du projet */
+.images-count {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate3d(-8px, -4px, 0px);
+    font-size: 1.5rem;
+    text-shadow:    0 0 2px rgb(0, 0, 0),
+                    2px 2px 4px rgba(52, 58, 64, 1),
+                    -2px -2px 4px rgba(52, 58, 64, 1),
+                    -2px 2px 4px rgba(52, 58, 64, 1),
+                    2px -2px 4px rgba(52, 58, 64, 1);
 }
