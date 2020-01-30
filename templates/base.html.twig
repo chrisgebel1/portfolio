@@ -3,6 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Christophe GEBELIN{% endblock %}</title>
+
+        {# favicon https://www.favicon-generator.org/ #}
+        <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
+
         {% block stylesheets %}
             {# fonteawsome #}
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet" >

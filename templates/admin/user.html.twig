@@ -42,7 +42,6 @@
                         <th class="align-middle">dernier login</th>
 {#                        <th class="align-middle">dernier logout</th>#}
                         <th class="align-middle">durée de connexion</th>
-{#                        <th></th>#}
                         <th></th>
                     </tr>
                 </thead>
@@ -53,12 +52,12 @@
                             <td class="align-middle">{{ user.id }}</td>
                             <td class="align-middle">{{ user.pseudo }}</td>
                             <td class="align-middle">
-                                {% if user.role == 'ROLE_ADMIN' %}
+                                {% if user.role == 'ROLE_ADMIN'  and user.id == app.user.id %}
                                     <span title="Vous ne pouvez pas modifier votre rôle">Admin</span>
                                 {% else %}
                                     <form class="form-group">
                                         <label for="{{ user.id }}"></label>
-                                        <select name="" id="{{ user.id }}" class="custom-select custom-select-sm role-select" data-role="{{ user.role }}">
+                                        <select name="{{ user.id }}" id="{{ user.id }}" class="custom-select custom-select-sm role-select" data-role="{{ user.role }}">
                                             {% for role in user.rolesAccepted %}
                                                 {% if role == user.role %}
                                                     <option value="{{ role }}" class="text-center" selected="selected">{{ role|replace({'ROLE_':''})|capitalize }}</option>
@@ -74,7 +73,6 @@
                             <td class="align-middle">{{ user.lastLogin|date('d/m/Y H:i') }}</td>
 {#                            <td class="align-middle">{{ user.lastLogOut|date('d/m/Y H:i') }}</td>#}
                             <td class="align-middle">{{ user.connectionTime }}</td>
-{#                            <td class="align-middle"><a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="text-white">Modifier</a></td>#}
                             {% if user.role == 'ROLE_ADMIN' and user.id == app.user.id %}
                                 <td class="align-middle op50"><span title="Vous ne pouvez pas supprimer votre propre compte">Supprimer</span></td>
                             {% else %}
@@ -97,5 +95,6 @@
 {% block javascripts %}
     {{ parent() }}
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="{{ asset('js/changeRole.js') }}"></script>
 {% endblock %}

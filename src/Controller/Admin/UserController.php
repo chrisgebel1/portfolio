@@ -3,13 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Form\EdituserType;
 use App\Repository\TypeRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -39,63 +37,50 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/edit/{id}", defaults={"id"=null}, requirements={"id": "\d+"})
+     * @Route("/ajaxedit/{id}/role/{role}", requirements={"id": "\d+", "role":"^[A-Z_]+"})
      */
-    public function edit(
-        Request $request,
+    public function editRole(
         EntityManagerInterface $entityManager,
-        UserRepository $userRepository,
-        TypeRepository $typeRepository,
-        $id)
+        $id, $role): Response
     {
-        $types = $typeRepository->findAll();
 
-        $users = $userRepository->findAll();
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $currentUser = $this->getUser();
+        $userEdit = $entityManager->find(User::class, $id);
 
-        if ( !is_null($id) )
+        if ( is_null($userEdit) ) // si l'id ne correspond pas un un utilisateur
         {
-            $userEdit = $entityManager->find(User::class, $id);
-        }
-
-        if ( is_null($userEdit) )
+            return $this->json([
+                'status'=> 403,
+                'message'=>'Utilisateur inexistant',
+                'user' => $id,
+            ],403);
+        } elseif ( $currentUser->getRole() == 'ROLE_ADMIN' ) // si l'utilisateur connecté est Admin
         {
-            throw new NotFoundHttpException();
-        }
-
-        $form = $this->createForm(EdituserType::class, $userEdit);
-        $form->handleRequest($request);
-
-        if ( $form->isSubmitted() )
-        {
-            if ($form->isValid())
+            if ( $currentUser->getId() == $userEdit->getId() ) // si l'utilisateur connecté modifie son rôle
             {
+                return $this->json([
+                    'status'=> 403,
+                    'message'=>'Vous ne pouvez pas modifier votre rôle',
+                    'user' => $id,
+                ],403);
+            }
+
+            if ( in_array($role, $userEdit->getRolesAccepted()) ){
+                $userEdit->setRole($role);
                 $entityManager = $this->getDoctrine()->getManager();
-
-                if ( $currentUser->getId() == $userEdit->getId() && $currentUser->getRole() != 'ROLE_ADMIN' ) {
-                    $userEdit->setRole('ROLE_ADMIN');
-                    $this->addFlash('error', 'Un Administrateur ne peut pas modifier son propre rôle');
-                }
-
                 $entityManager->persist($userEdit);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'L\'utilisateur a été modifié');
-                return $this->redirectToRoute('app_admin_user_index');
-            } else {
-                $this->addFlash('error', 'Le formulaire contient des erreurs');
+                return $this->json([
+                    'status'=> 200,
+                    'message'=>'Le rôle de l\'utilisateur ' . $userEdit->getPseudo() . ' a été modifié',
+                    'user' => $id,
+                ],200);
             }
+
         }
 
-        return $this->render(
-          'admin/user.html.twig',
-          [
-              'users' => $users,
-              'userEdit' => $userEdit,
-              'formEdit' => $form->createView(),
-              'types' => $types
-          ]
-        );
+
     }
 
     /**

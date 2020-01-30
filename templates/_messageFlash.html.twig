@@ -1,6 +1,6 @@
 {#{% dump(app.session.flashbag.all|length) %}#}
 {#{% if app.session.flashbag.all|length > 0 %}#}
-<div class="form-group col-lg-8 col-12 mx-auto">
+<div class="form-group col-lg-8 col-12 mx-auto flash-message">
     {# affiche des messages flash #}
     {% for type, messages in app.session.flashbag.all  %}
         {% for message in messages %}
