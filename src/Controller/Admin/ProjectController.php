@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("/{type}", defaults={"type"=null})
+     * @Route("/type/{type}", defaults={"type"=null})
      */
     public function index(ProjectRepository $projectRepository,
                           TypeRepository $typeRepository,
@@ -35,7 +35,6 @@ class ProjectController extends AbstractController
             [],
             ['id'=>'DESC']
         );
-
 
         if ( is_null($type) )
         {
@@ -65,10 +64,9 @@ class ProjectController extends AbstractController
     /**
      * @Route("/edit/{id}", defaults={"id"=null}, requirements={"id":"\d+"})
      */
-    public function editProjet(
+    public function edit(
         Request $request,
         EntityManagerInterface $entityManager,
-        ProjectRepository $projectRepository,
         TypeRepository $typeRepository,
         $id
     )
@@ -80,6 +78,7 @@ class ProjectController extends AbstractController
 
         $originalImage = null; // dans le cas de modification
         $originalImages = null; // dans le cas de modification
+        dump('toto');
 
         if ( is_null($id) ) // création
         {

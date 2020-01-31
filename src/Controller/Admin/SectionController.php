@@ -26,10 +26,15 @@ class SectionController extends AbstractController
      */
     public function section(CategoryRepository $categoryRepository, TypeRepository $typeRepository)
     {
-        $categories = $categoryRepository->findAll();
+//        $categories = $categoryRepository->findAll();
+        $categories = $categoryRepository->findBy(
+            [],
+            ['name'=>'ASC']
+        );
+
         $types = $typeRepository->findBy(
             [],
-            ['id'=>'DESC']
+            ['id'=>'ASC']
         );
 
         return $this->render(

@@ -149,182 +149,50 @@
 
 
     <section class="page-section" id="portfolio">
-        <div class="container text-center mb-3">
+        <div class="text-center">
             <h2 class="mb-4">Portfolio</h2>
-            <hr class="divider my-4">
-            <h6>Print - Retouche</h6>
         </div>
 
-        <div class="container-fluid p-0">
-            <div class="row no-gutters">
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/1.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/1.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/2.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/2.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/3.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/3.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/4.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/4.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/5.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/5.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/6.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/6.jpg" alt="">
-                        <div class="portfolio-box-caption p-3">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
+        {% for type in types %}
         <div class="container text-center mb-3">
-            <hr class="divider my-4">
-            <h6>Web</h6>
+            <hr class="divider my-4 {{ (loop.index0 > 0) ? 'mt-5' : 'mt-0' }}">
+            <h5 class="text-primary font-weight-bold">Portfolio | {{ type.name }}</h5>
         </div>
 
         <div class="container-fluid p-0">
             <div class="row no-gutters">
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/1.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/1.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
+                {%  set projectLoop = 0 %}
+                {% for project in projects %}
+                    {% if project.type == type %}
+                        {% set projectLoop = projectLoop + 1 %}
+                        <div class="col-lg-4 col-sm-6 position-relative" style="height: 300px; overflow: hidden">
+                            <a class="portfolio-box" href="{{ asset('img/portfolio/' ~ project.files[0]) }}">
+                                <img class="img-fluid img-fit" src="{{ asset('img/portfolio/' ~ project.files[0]) }}" alt="{{ project.infoShort }}" height="300px" style="object-fit: cover">
+                                <div class="portfolio-box-caption">
+                                    <div class="project-category text-white-50">
+                                        {{ project.category }}
+                                    </div>
+                                    <div class="project-name">
+                                        {{ project.name }}
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/2.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/2.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
+                    {% endif %}
+                {% endfor %}
+                {% for i in 0..2 %}
+                    {% if projectLoop % 3 != 0 %}
+                        <div class="col-lg-4 col-sm-6 bg-primary">
                         </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/3.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/3.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/4.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/4.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/5.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/5.jpg" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a class="portfolio-box" href="img/portfolio/fullsize/6.jpg">
-                        <img class="img-fluid" src="img/portfolio/thumbnails/6.jpg" alt="">
-                        <div class="portfolio-box-caption p-3">
-                            <div class="project-category text-white-50">
-                                Category
-                            </div>
-                            <div class="project-name">
-                                Project Name
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        {% set projectLoop = projectLoop + 1 %}
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
+
+        {% endfor %}
+
+
     </section>
 
 

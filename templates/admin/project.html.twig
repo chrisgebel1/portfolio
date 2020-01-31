@@ -23,9 +23,10 @@
         {% include '_messageFlash.html.twig' %}
 
         {% if projects %}
-            <div class="container d-flex flex-wrap justify-content-around">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
             {% for project in projects %}
-                    <div class="card mb-4">
+                    <div class="card mb-4 mx-3">
                         <div class="card-img-top">
                             {% for file in project.files %}
                                 {% if file == project.files|first %}
@@ -45,7 +46,7 @@
                             <h6 class="border-bottom border-dark">{{ project.type|capitalize }} <small>{{ project.category }}</small></h6>
                             <p class="card-text" style="font-size: .8rem;">{{ project.infoLong|raw }}</p>
                             <div class="buttons">
-                                <a href="{{ path('app_admin_project_editprojet', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen" title="Modifier"></i></a>
+                                <a href="{{ path('app_admin_project_edit', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen" title="Modifier"></i></a>
                                 <a href="{{ path('app_admin_project_deleteprojet', {'id':project.id}) }}"
                                    class="btn btn-danger text-white"><i class="far fa-trash-alt" title="Supprimer"
                                    onclick="return(confirm('Etes-vous sûr de vouloir supprimer le projet {{ project.name }} ?'))"></i></a>
@@ -53,6 +54,7 @@
                         </div>
                     </div>
             {% endfor %}
+                </div>
             </div>
             <div style="height:70px"></div>
         {% else %}
@@ -67,7 +69,7 @@
                         <hr class="divider my-4">
                     </div>
                     <div class="col-lg-8 align-self-baseline">
-                        <a class="btn btn-sm btn-primary" href="{{ path('app_admin_project_editprojet') }}">Créer un projet</a>
+                        <a class="btn btn-sm btn-primary" href="{{ path('app_admin_project_edit') }}">Créer un projet</a>
                     </div>
                 </div>
             </div>

@@ -46,7 +46,7 @@
                             {% else %}
                                 {% set margeRight = "mr-2" %}
                             {% endif %}
-                                <div id="imageIndex{{ loop.index0 }}" class="container-delete {{ margeRight }}">
+                                <div id="imageIndex{{ loop.index0 }}" class="container-delete {{ margeRight }} mb-5">
                                     <a href="{{ path('app_admin_project_ajaxdeleteoneimageproject', {'id': project.id, 'img': loop.index0}) }}"
                                        data-indexImage="{{ loop.index0 }}" class="delete-img-btn"
                                        onclick="return(confirm('Etes-vous sûr de vouloir supprimer l\'image {{ loop.index }} ?'))">
