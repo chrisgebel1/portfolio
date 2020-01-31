@@ -1,33 +1,43 @@
 # Portfolio
 
-Projet personnel pour la réalisation de mon site personnel sous Symfony4.<br>
+Projet personnel concernant la réalisation d'un site personnel à l'aide de Symfony 4.<br>
 Cela me permet de mettre en pratique les notions vues lors de ma formation (WebForce3, 490h, développeur/intégrateur Web, décembre 2019).<br>
 <br>
-Le but de ce site est de présenter les différents travaux réalisés lors de mes précédentes expériences.<br>
+Le but de ce projet est de présenter les différents travaux réalisés lors de mes précédentes expériences.<br>
 <br>
-Il est possible de rajouter et modifier des travaux (projets) en leur attribuant des propriétés :<br>
-  => nom de projet<br>
-  => type de projet (Print/retouche ou Web)<br>
-  => catégorie en fonction du type de projet<br>
-  => ajout d'une ou plusieurs images<br>
-  => une description courte (attribut html alt et title)<br>
-  => une description plus longue décrivant le projet<br>
+Le site est organisé de la façon suivante :<br>
+  => Une page d'accueil, avec une barre de navigation, permet d'avoir accès aux différentes rubriques de cette page (présentation, formation, compétences, expérience et projets professionels, puis contact).<br>
+  => Les projets sont organiés par type. Un projet par catégorie sera affiché de façon aléatoire.<br>
+  => Une section contact se trouve en bas de la page d'acceuil.<br>
+  => La partie back-office se trouve bien évidemment sur d'autres pages avec barre de navigation secondaire.<br>
+<br>
+Dans la partie back-office, il est possible de créer/modifier/supprimer des projets, catégories, types et utilisateurs.<br>
+Il y a également un affichage de différentes informations (nombre d'inscrits total et pour chaque rôle; nombre de projets total et pour chaque type).
+<br>
+Un objet PROJECT aura les propriétés suivantes (creation/modification/suppression par Admin uniquement) :<br>
+  => Nom de projet<br>
+  => Type de projet (Print/retouche ou Web)<br>
+  => Catégorie en fonction du type de projet<br>
+  => Ajout d'une ou plusieurs images<br>
+  => Une description courte (attribut html alt et title pour les images)<br>
+  => Une description plus longue concernant le projet<br>
   <br>
-En plus de cette première entité PROJET, il existe deux entités TYPE et CATEGORIE :<br>
-  => type : nom du type<br>
-  => catégorie : nom de la catégorie, nom du type de catégorie<br>
+Il existe deux entités TYPE et CATEGORIE permettant de classer les projets:<br>
+  => Type : permet de regrouper des catégories sous un même type (ex: web, retouche image...)<br>
+  => Catégorie : permet de définir une catégorie à laquelle on attribuera un seul type <br>
 <br>
-Enfin, pour gérer le site une entité USER existe :<br>
-  => nom<br>
-  => mot de passe<br>
-  => role (ROLE_USER par défaut)<br>
-  => date d'enregistrement/inscription<br>
-  => date de dernier login<br>
-  => date de dernier logout<br>
+Enfin, pour gérer le site, une entité USER existe (creation/modification/suppression par Admin uniquement) :<br>
+  => Pseudo (unique)<br>
+  => Mot de passe<br>
+  => Rôle (ROLE_USER par défaut)<br>
+  => Date d'enregistrement/inscription<br>
+  => Date de dernier login<br>
+  => Date de dernier logout<br>
+  <br>
+  => Seul la modification du rôle et la suppression de l'utilisateur est possible par un Admin<br>
+  => Un Admin ne pourra pas supprimer/modifier son propre rôle
 <br>
-En tant que simple ROLE_USER, il est simplement possible de modifier son nom et son mot de passe.<br>
-<br>
-Un espace back-office réservé au ROLE_ADMIN existe afin d'avoir accès à la partie administration et création des projets.<br>
-  => affichage d'informations (nombre d'inscrits total et pour chaque rôle; nombre de projets total et pour chaque type)
-<br>
-A la date du 20 janvier 2020, le site n'est pas encore en ligne.
+En tant que simple ROLE_USER, il est simplement possible de modifier son pseudo et son mot de passe sur une page privée.<br>
+<br><br>
+
+Le site n'est pas encore en ligne !.

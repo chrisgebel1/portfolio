@@ -145,9 +145,6 @@
     </section>
 
     <!-- Portfolio Section https://mdbootstrap.com/plugins/jquery/gallery/ -->
-
-
-
     <section class="page-section" id="portfolio">
         <div class="text-center">
             <h2 class="mb-4">Portfolio</h2>
@@ -161,37 +158,37 @@
 
         <div class="container-fluid p-0">
             <div class="row no-gutters">
-                {%  set projectLoop = 0 %}
-                {% for project in projects %}
-                    {% if project.type == type %}
-                        {% set projectLoop = projectLoop + 1 %}
-                        <div class="col-lg-4 col-sm-6 position-relative" style="height: 300px; overflow: hidden">
-                            <a class="portfolio-box" href="{{ asset('img/portfolio/' ~ project.files[0]) }}">
-                                <img class="img-fluid img-fit" src="{{ asset('img/portfolio/' ~ project.files[0]) }}" alt="{{ project.infoShort }}" height="300px" style="object-fit: cover">
+                {% for category in categories %}
+                    {% set projectCategory = [] %}
+                    {% set projectCategoryAff = [] %}
+                    {% for project in projects %}
+                        {% if project.category == category and project.category.type == type %}
+                            {# regroupe tous les projets d'une catégorie et d'un type #}
+                            {% set projectCategory = projectCategory|merge([project]) %}
+                            {# sélectionne aléatoirement un projet à afficher #}
+                            {% set projectCategoryAff = random(projectCategory) %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if projectCategoryAff is not empty  %}
+                        <div class="col-lg-4 col-sm-6 position-relative div-portfolio">
+                            <a class="portfolio-box" href="{{ asset('img/portfolio/' ~ projectCategoryAff.files[0]) }}" title="{{ projectCategoryAff.infoShort }}">
+                                <img class="img-fluid img-fluid-home img-fit" src="{{ asset('img/portfolio/' ~ projectCategoryAff.files[0]) }}" alt="{{ projectCategoryAff.infoShort }}">
                                 <div class="portfolio-box-caption">
                                     <div class="project-category text-white-50">
-                                        {{ project.category }}
+                                        {{ projectCategoryAff.category }}
                                     </div>
                                     <div class="project-name">
-                                        {{ project.name }}
+                                        {{ projectCategoryAff.name }}
                                     </div>
                                 </div>
                             </a>
                         </div>
                     {% endif %}
                 {% endfor %}
-                {% for i in 0..2 %}
-                    {% if projectLoop % 3 != 0 %}
-                        <div class="col-lg-4 col-sm-6 bg-primary">
-                        </div>
-                        {% set projectLoop = projectLoop + 1 %}
-                    {% endif %}
-                {% endfor %}
             </div>
         </div>
 
         {% endfor %}
-
 
     </section>
 

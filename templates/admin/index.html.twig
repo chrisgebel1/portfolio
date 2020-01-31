@@ -76,15 +76,15 @@
                                 <tr>
                                     <td>{{ projects|length }}</td>
                                     {% for type in types %}
-                                    {% set projectType = 0 %}
-                                    <td>
-                                    {% for project in projects %}
-                                        {% if project.type == type %}
-                                            {% set projectType = projectType + 1 %}
-                                        {% endif %}
-                                    {% endfor %}
-                                            {{ projectType }}
-                                    </td>
+                                        {% set projectType = 0 %}
+                                        {% for project in projects %}
+                                            {% if project.type == type %}
+                                                {% set projectType = projectType + 1 %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        <td>
+                                                {{ projectType }}
+                                        </td>
                                     {% endfor %}
                                 </tr>
                                 </tbody>

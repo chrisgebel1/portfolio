@@ -138,7 +138,7 @@ table {
 
 /* section projets \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
 
-/* card project */
+ card project
 .card-text, .card .btn {
 	font-size: .8rem;
 }
@@ -147,6 +147,19 @@ table {
 	background-color: rgba(255, 255, 255, 0.75);
 }
 
+.img-fluid-home, .div-portfolio {
+	height: 300px;
+	object-fit: cover;
+	overflow: hidden;
+}
+
+.img-blurred
+{
+	/* Add the blur effect */
+	filter: blur(3px);
+	-webkit-filter: blur(3px);
+	opacity: 50%;
+}
 .portfolio-box .img-fit {
 	/*width: auto;*/
 	height: 100%;
