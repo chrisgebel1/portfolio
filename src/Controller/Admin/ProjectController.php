@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Project;
 use App\Form\ProjectType;
+use App\Repository\CategoryRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,13 +28,18 @@ class ProjectController extends AbstractController
      * @Route("/type/{type}", defaults={"type"=null})
      */
     public function index(ProjectRepository $projectRepository,
-                          TypeRepository $typeRepository,
+                          TypeRepository $typeRepository, CategoryRepository $categoryRepository,
                           $type)
     {
 
         $types = $typeRepository->findBy(
             [],
-            ['id'=>'DESC']
+            ['name'=>'ASC']
+        );
+
+        $categories = $categoryRepository->findBy(
+            [],
+            ['name'=>'ASC']
         );
 
         if ( is_null($type) )
@@ -52,9 +58,10 @@ class ProjectController extends AbstractController
 
         return $this->render('admin/project.html.twig',
             [
-                'projects' => $projects,
-                'types' => $types,
-                'nameType' => $nameType
+                'projects'      => $projects,
+                'types'         => $types,
+                'categories'    => $categories,
+                'nameType'      => $nameType
             ]
         );
     }

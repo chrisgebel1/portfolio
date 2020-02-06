@@ -11,19 +11,7 @@
                     <a href="{{ path('app_admin_user_index') }}" class="nav-link js-scroll-trigger">Users</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link {#dropdown-toggle#}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        Projets
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-BO dropdown-menu-right">
-                        <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index') }}">Tous</a>
-                        {% if types %}
-                            {% for type in types %}
-                                <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_index', {'type':type.id}) }}">{{ type.name|capitalize }}</a>
-                            {% endfor %}
-                        {% endif %}
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item dropdown-item-BO" href="{{ path('app_admin_project_edit') }}">Ajouter</a>
-                    </div>
+                    <a href="{{ path('app_admin_project_index') }}" class="nav-link js-scroll-trigger" >Projets</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link {#dropdown-toggle#}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">

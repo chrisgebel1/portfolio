@@ -6,6 +6,8 @@ use App\Repository\CategoryRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -32,5 +34,35 @@ class IndexController extends AbstractController
                 'categories'    => $categories
             ]
         );
+    }
+
+    /**
+     * @param Request $request
+     * @param ProjectRepository $projectRepository
+     * @Route("/search-result")
+     */
+    public function searchProject(Request $request, ProjectRepository $projectRepository)
+    {
+        $response = [];
+
+        if ( $request->query->has('term') )
+        {
+            $value = $request->query->get('term');
+            $projects = $projectRepository->search($value);
+
+            foreach ( $projects as $project )
+            {
+                $response[] = [
+                    'id'        => $project->getId(),
+                    'name'      => $project->getName(),
+                    'type'      => $project->getType()->getName(),
+                    'category'  => $project->getCategory()->getName(),
+                    'info_short'=> $project->getInfoShort(),
+                    'info_long' => $project->getInfoLong(),
+                    'images'    => $project->getFiles()
+                ];
+            }
+        }
+        return new JsonResponse($response);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use PhpParser\Node\Name;
 
 /**
  * @method Project|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,20 @@ class ProjectRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Project::class);
     }
+
+
+    public function search($val)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.name LIKE :val')
+            ->setParameter('val', '%'.$val.'%')
+            ->orderBy('p.name', 'ASC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
     // /**
     //  * @return Project[] Returns an array of Project objects
