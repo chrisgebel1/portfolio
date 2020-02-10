@@ -20,7 +20,6 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
-
     public function search($val)
     {
         return $this->createQueryBuilder('p')
@@ -28,6 +27,7 @@ class ProjectRepository extends ServiceEntityRepository
             ->setParameter('val', '%'.$val.'%')
             ->orderBy('p.name', 'ASC')
             ->setMaxResults(5)
+//            ->groupBy('p.name')
             ->getQuery()
             ->getResult()
             ;

@@ -25,12 +25,47 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("/type/{type}", defaults={"type"=null})
+     * @Route("/")
      */
     public function index(ProjectRepository $projectRepository,
+                          TypeRepository $typeRepository, CategoryRepository $categoryRepository
+                          )
+    {
+
+        $types = $typeRepository->findBy(
+            [],
+            ['name' => 'ASC']
+        );
+
+        $categories = $categoryRepository->findBy(
+            [],
+            ['name' => 'ASC']
+        );
+
+        $nameType = null;
+        $projects = $projectRepository->findAll();
+
+        return $this->render('admin/project.html.twig',
+            [
+                'projects' => $projects,
+                'types' => $types,
+                'categories' => $categories,
+                'nameType' => $nameType
+            ]
+        );
+    }
+
+    /**
+     * @Route("/type/{type}", requirements={"id":"\d+"})
+     */
+    public function indexByType(ProjectRepository $projectRepository,
                           TypeRepository $typeRepository, CategoryRepository $categoryRepository,
                           $type)
     {
+
+        if ( is_null($type) ) {
+            $this->redirectToRoute('app_admin_project_index');
+        }
 
         $types = $typeRepository->findBy(
             [],
@@ -42,19 +77,136 @@ class ProjectController extends AbstractController
             ['name'=>'ASC']
         );
 
-        if ( is_null($type) )
-        {
-            $nameType = '';
-            $projects = $projectRepository->findAll();
-        } else
-        {
-            $nameType = $typeRepository->find($type);
-            $projects = $projectRepository->findBy(
-                ['type'=>$type],
-                ['type'=>'DESC']
-            );
+        $nameType = $typeRepository->find($type);
+
+        if ( !$nameType ) {
+            $this->addFlash('error', 'Le type ' . $type. ' n\'existe pas');
+            return $this->redirectToRoute('app_admin_project_index');
         }
 
+        $projects = $projectRepository->findBy(
+            ['type'=>$type],
+            ['type'=>'DESC']
+        );
+
+        return $this->render('admin/project.html.twig',
+            [
+                'projects'      => $projects,
+                'types'         => $types,
+                'categories'    => $categories,
+                'nameType'      => $nameType
+            ]
+        );
+    }
+
+    /**
+     * @Route("/id/{id}", requirements={"id":"\d+"})
+     */
+    public function indexById(ProjectRepository $projectRepository,
+                          TypeRepository $typeRepository, CategoryRepository $categoryRepository,
+                          $id)
+    {
+
+        if ( is_null($id) ) {
+            $this->redirectToRoute('app_admin_project_index');
+        }
+
+        $types = $typeRepository->findBy(
+            [],
+            ['name'=>'ASC']
+        );
+
+        $categories = $categoryRepository->findBy(
+            [],
+            ['name'=>'ASC']
+        );
+
+        $nameType = '';
+        $projects = $projectRepository->find($id);
+
+        if ( !$projects ) {
+            $this->addFlash('error', 'Le projet ' . $id. ' n\'existe pas');
+            return $this->redirectToRoute('app_admin_project_index');
+        }
+
+
+        return $this->render('admin/project.html.twig',
+            [
+                'projects'      => $projects,
+                'types'         => $types,
+                'categories'    => $categories,
+                'nameType'      => $nameType
+            ]
+        );
+    }
+
+    /**
+     * @Route("/category/{cat}")
+     */
+    public function indexByCategory(ProjectRepository $projectRepository,
+                                    TypeRepository $typeRepository, CategoryRepository $categoryRepository,
+                                    $cat)
+    {
+        $nameType = '';
+        $d = 'and';
+
+        if ( is_null($cat) ) {
+            $this->redirectToRoute('app_admin_project_index');
+        }
+
+        $types = $typeRepository->findBy(
+            [],
+            ['name'=>'ASC']
+        );
+
+        $categories = $categoryRepository->findBy(
+            [],
+            ['name'=>'ASC']
+        );
+
+        if ( preg_match("/^(\d+((and\d+)+))$/", $cat) )
+        {
+
+            if ( strpos($cat, $d) )
+            {
+                $tab = explode($d, $cat, count($categories));
+                $projects = [];
+
+                foreach ($tab as $idCat) {
+                    $project = $projectRepository->findBy(
+                        ['category'=>$idCat],
+                        ['category'=>'DESC']
+                    );
+
+                    if (count($project)>0) {
+                        foreach ($project as $p){
+                            array_push($projects, $p);
+                        }
+                    } else {
+                        $this->addFlash('error', 'La catégorie ' . $idCat. ' n\'existe pas');
+                    }
+                }
+
+            } else {
+                $this->addFlash('error', 'Une erreur dans l\'url a été détectée');
+                return $this->redirectToRoute('app_admin_project_index');
+            }
+
+        } elseif ( preg_match("/^\d+$/", $cat) ) {
+            $projects = $projectRepository->findBy(
+                ['category'=>$cat],
+                ['category'=>'DESC']
+            );
+
+            if ( count($projects) == 0 ) {
+                $this->addFlash('error', 'La catégorie ' . $cat. ' n\'existe pas');
+                return $this->redirectToRoute('app_admin_project_index');
+            }
+
+        } else {
+            $this->addFlash('error', 'Une erreur dans l\'url a été détectée');
+            return $this->redirectToRoute('app_admin_project_index');
+        }
 
         return $this->render('admin/project.html.twig',
             [
@@ -85,7 +237,7 @@ class ProjectController extends AbstractController
 
         $originalImage = null; // dans le cas de modification
         $originalImages = null; // dans le cas de modification
-        dump('toto');
+        // dump('toto');
 
         if ( is_null($id) ) // création
         {
@@ -309,6 +461,6 @@ class ProjectController extends AbstractController
                 'image' => $img
             ],200);
         }
-
     }
+
 }

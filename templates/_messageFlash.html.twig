@@ -1,19 +1,19 @@
 {% block error %}
-{#{% dump(app.session.flashbag.all|length) %}#}
-{#{% if app.session.flashbag.all|length > 0 %}#}
-<div class="form-group col-lg-8 col-12 mx-auto flash-message">
-    {# affiche des messages flash #}
-    {% for type, messages in app.session.flashbag.all  %}
-        {% for message in messages %}
-            {# pour la classe alert-danger bootstrap #}
-            {% if type == 'error' %}
-                {% set type = 'danger' %}
-            {% endif %}
-            <div class="alert alert-{{ type }} text-center" {# style="font-size: .8rem;" #}>
-                {{ message|raw }}
-            </div>
+    {#{% dump(app.session.flashbag.all|length) %}#}
+    {#{% if app.session.flashbag.all|length > 0 %}#}
+    <div class="form-group col-12 mx-auto flash-message">
+        {# affiche des messages flash #}
+        {% for type, messages in app.session.flashbag.all  %}
+            {% for message in messages %}
+                {# pour la classe alert-danger bootstrap #}
+                {% if type == 'error' %}
+                    {% set type = 'danger' %}
+                {% endif %}
+                <div class="alert alert-{{ type }} text-center" {# style="font-size: .8rem;" #}>
+                    {{ message|raw }}
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-</div>
-{#{% endif %}#}
+    </div>
+    {#{% endif %}#}
 {% endblock %}

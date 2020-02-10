@@ -53,13 +53,15 @@ class IndexController extends AbstractController
             foreach ( $projects as $project )
             {
                 $response[] = [
-                    'id'        => $project->getId(),
-                    'name'      => $project->getName(),
-                    'type'      => $project->getType()->getName(),
-                    'category'  => $project->getCategory()->getName(),
-                    'info_short'=> $project->getInfoShort(),
-                    'info_long' => $project->getInfoLong(),
-                    'images'    => $project->getFiles()
+                    'id'            => $project->getId(),
+                    'name'          => $project->getName(),
+                    'type'          => $project->getType()->getName(),
+                    'typeID'        => $project->getType()->getId(),
+                    'category'      => $project->getCategory()->getName(),
+                    'categoryID'    => $project->getCategory()->getId(),
+                    'info_short'    => $project->getInfoShort(),
+                    'info_long'     => $project->getInfoLong(),
+                    'images'        => $project->getFiles()
                 ];
             }
         }

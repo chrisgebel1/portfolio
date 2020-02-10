@@ -22,8 +22,11 @@
     {# Navigation BackOffice #}
     {% include 'admin/_navBackOffice.html.twig' %}
 
+    {% set typeUrl = null %}
+
     <!-- Masthead -->
     <header class="mastheadBO bg-dark">
+
         {% if projects %}
             <div class="container-fluid">
                 <div class="row">
@@ -41,37 +44,57 @@
                                 {% if types|length > 0 %}
                                     <li class="nav-item mb-3">
                                     Types :
-                                        {% for type in types %}
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" value="{{ type.name }}" id="defaultCheckType{{ type.id }}" name="type-select"
-                                            {% if app.request.uri|getUrlId is not null %}
-                                                {% if type.id == app.request.uri|getUrlId %}
-                                                    checked
-                                                {% endif %}
-                                            {% endif %}
-                                            >
-                                            <label class="form-check-label" for="defaultCheckType{{ type.id }}">
-                                                {{ type.name }}
-                                            </label>
-                                        </div>
-                                        {% endfor %}
+                                    {% for type in types %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="{{ type.name }}" id="defaultCheckType{{ type.id }}" name="type-select"
+                                        {% if app.request.uri|getUrlIdFromTyp is not null and type.id == app.request.uri|getUrlIdFromTyp and 'type' in app.request.uri %}
+                                            {% set typeUrl = type.id %}
+                                            checked
+                                        {% endif %}
+                                        >
+                                        <label class="form-check-label" for="defaultCheckType{{ type.id }}">
+                                            {{ type.name }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
                                 </li>
                                 {% endif %}
+
                                 {% if categories|length > 0 %}
                                     <li class="nav-item mb-3">
                                         Catégories :
                                         {% for category in categories %}
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheckCategory{{ category.id }}">
-                                            <label class="form-check-label" for="defaultCheckCategory{{ category.id }}">
-                                                {{ category.name }}
-                                            </label>
-                                        </div>
+                                            {% set statusCat = '' %}
+                                            {% if (app.request.uri|getUrlIdFromCat is not null and 'category' in app.request.uri ) %}
+                                                {% if (app.request.uri|getUrlIdFromCat is iterable and category.id in app.request.uri|getUrlIdFromCat) %}
+                                                    {% set statusCat = 'checked' %}
+                                                    {% dump('coche') %}
+                                                {% else %}
+                                                    {% dump('decoche') %}
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if typeUrl is not null %}
+                                                {% if category.type.id == typeUrl %}
+                                                        <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheckCategory{{ category.id }}" {{ statusCat }}>
+                                                        <label class="form-check-label" for="defaultCheckCategory{{ category.id }}">
+                                                            {{ category.name }}
+                                                        </label>
+                                                    </div>
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheckCategory{{ category.id }}" {{ statusCat }}>
+                                                    <label class="form-check-label" for="defaultCheckCategory{{ category.id }}">
+                                                        {{ category.name }}
+                                                    </label>
+                                                </div>
+                                            {% endif %}
                                         {% endfor %}
                                     </li>
-                                    {% endif %}
+                                {% endif %}
                                 <li class="nav-item mb-3">
-                                    <a href="" class="btn btn-dark btn-sm" aria-disabled="true">Filtrer</a>
+                                    <a href="#" class="btn btn-dark btn-sm" aria-disabled="true" id="filter">Filtrer</a>
                                     <a href="{{ path('app_admin_project_index') }}" class="btn btn-primary btn-sm" aria-disabled="true">Reset</a>
                                 </li>
                                 <li class="nav-item mt-3">
@@ -80,41 +103,71 @@
                             </ul>
                         </div>
                     </div>
-                    <div>
+
+                    <div role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 d-flex flex-wrap justify-content-center" id="content-projects">
+
                         {# Messages Flash #}
                         {% include '_messageFlash.html.twig' %}
-                    </div>
 
-                    <div role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 d-flex flex-wrap justify-content-center">
-                        {% for project in projects %}
-                                <div class="card mb-4 mx-3 card{{ project.type.name }}">
-                                    <div class="card-img-top">
-                                        {% for file in project.files %}
-                                            {% if file == project.files|first %}
-                                                <a href="{{ asset('img/portfolio/'~ file) }}" data-toggle="lightbox" data-gallery="gallery">
-                                                    <img src="{{ asset('img/portfolio/'~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}">
-                                                </a>
-                                            {% else %}
-                                                <a href="{{ asset('img/portfolio/'~ file) }}" data-toggle="lightbox" data-gallery="gallery">
-                                                    <img src="{{ asset('img/portfolio/'~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="d-none">
-                                                </a>
-                                            {% endif %}
-                                        {% endfor %}
-                                        <div class="images-count Merriweather text-white" title="Nombre d'images du projet">{{ project.files|length }}</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title border-bottom border-dark">{{ project.name|upper }}</h5>
-                                        <h6 class="border-bottom border-dark">{{ project.type|capitalize }} <small>{{ project.category }}</small></h6>
-                                        <p class="card-text" style="font-size: .8rem;">{{ project.infoLong|raw }}</p>
-                                        <div class="buttons">
-                                            <a href="{{ path('app_admin_project_edit', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen" title="Modifier"></i></a>
-                                            <a href="{{ path('app_admin_project_deleteprojet', {'id':project.id}) }}"
-                                               class="btn btn-danger text-white"><i class="far fa-trash-alt" title="Supprimer"
-                                               onclick="return(confirm('Etes-vous sûr de vouloir supprimer le projet {{ project.name }} ?'))"></i></a>
+                        {% if projects is iterable %}
+                            {% for project in projects %}
+                                    <div class="card mb-4 mx-3 card{{ project.type.name }}">
+                                        <div class="card-img-top">
+                                            {% for file in project.files %}
+                                                {% if file == project.files|first %}
+                                                    <a href="{{ asset('img/portfolio/'~ file) }}" data-toggle="lightbox" data-gallery="gallery">
+                                                        <img src="{{ asset('img/portfolio/'~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}">
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ asset('img/portfolio/'~ file) }}" data-toggle="lightbox" data-gallery="gallery">
+                                                        <img src="{{ asset('img/portfolio/'~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="d-none">
+                                                    </a>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="images-count Merriweather text-white" title="Nombre d'images du projet">{{ project.files|length }}</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title border-bottom border-dark">{{ project.name|upper }}</h5>
+                                            <h6 class="border-bottom border-dark">{{ project.type|capitalize }} <small>{{ project.category }}</small></h6>
+                                            <p class="card-text" style="font-size: .8rem;">{{ project.infoLong|raw }}</p>
+                                            <div class="buttons">
+                                                <a href="{{ path('app_admin_project_edit', {'id':project.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen" title="Modifier"></i></a>
+                                                <a href="{{ path('app_admin_project_deleteprojet', {'id':project.id}) }}"
+                                                   class="btn btn-danger text-white"><i class="far fa-trash-alt" title="Supprimer"
+                                                   onclick="return(confirm('Etes-vous sûr de vouloir supprimer le projet {{ project.name }} ?'))"></i></a>
+                                            </div>
                                         </div>
                                     </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="card mb-4 mx-3 card{{ projects.type.name }}">
+                                <div class="card-img-top">
+                                    {% for file in projects.files %}
+                                        {% if file == projects.files|first %}
+                                            <a href="{{ asset('img/portfolio/'~ file) }}" data-toggle="lightbox" data-gallery="gallery">
+                                                <img src="{{ asset('img/portfolio/'~ file) }}" alt="{{ projects.infoShort }}" title="{{ projects.infoShort }}">
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ asset('img/portfolio/'~ file) }}" data-toggle="lightbox" data-gallery="gallery">
+                                                <img src="{{ asset('img/portfolio/'~ file) }}" alt="{{ projects.infoShort }}" title="{{ projects.infoShort }}" class="d-none">
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <div class="images-count Merriweather text-white" title="Nombre d'images du projet">{{ projects.files|length }}</div>
                                 </div>
-                        {% endfor %}
+                                <div class="card-body">
+                                    <h5 class="card-title border-bottom border-dark">{{ projects.name|upper }}</h5>
+                                    <h6 class="border-bottom border-dark">{{ projects.type|capitalize }} <small>{{ projects.category }}</small></h6>
+                                    <p class="card-text" style="font-size: .8rem;">{{ projects.infoLong|raw }}</p>
+                                    <div class="buttons">
+                                        <a href="{{ path('app_admin_project_edit', {'id':projects.id}) }}" class="btn btn-warning text-white mr-1"><i class="fas fa-pen" title="Modifier"></i></a>
+                                        <a href="{{ path('app_admin_project_deleteprojet', {'id':projects.id}) }}"
+                                           class="btn btn-danger text-white"><i class="far fa-trash-alt" title="Supprimer"
+                                           onclick="return(confirm('Etes-vous sûr de vouloir supprimer le projet {{ projects.name }} ?'))"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -151,57 +204,101 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
-        $(function () {
-            $('#search-project').autocomplete({
-                delay: 1000,
-                minLength: 3,
-                source: '/search-result',
-                select: function (event, ui) {
-                    $('#search-project').val(ui.item.name);
-                    // window.location.href = '/project/' + ui.item.id;
-                    // console.log(ui.item.name);
-                    if ( false !== self._trigger( "select", event, { item: item } ) ) {
-                        self.element.val( item.value );
+        $(document).ready(function() {
+            const $originPathname = window.location.pathname; // console.log($originPathname);
+            const $originURL = window.location.origin; // console.log($originURL);
+            let $projects = []; // tableau qui contiendra toutes les checkboxes
+            // const $typePathname = $originPathname.match(/(\d+)$/)[0];
+            // $typePathname = $originPathname.replace(/^[a-zA-Z:\/]+/, ''); console.log($typePathname);
+
+            // constructeur objet Project
+            function Project(id, name) {
+                this.id = id;
+                this.name = name;
+            }
+
+            // fonction de classement ASC des catégories cochées
+            // => https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
+            function orderedASC( a, b ) {
+                if ( a.name < b.name ) return -1;
+                if ( a.name > b.name ) return 1;
+                return 0;
+            }
+
+            // champs de recherche => https://api.jqueryui.com/autocomplete/
+            $(function () {
+                $('#search-project').autocomplete({
+                    delay: 1000,
+                    minLength: 3,
+                    source: '{{ path('app_index_searchproject') }}',
+                    select: function (event, ui) {
+                        $('#search-project').val(ui.item.name);
+                        window.location.href = $originURL+ "/admin/project/id/" + ui.item.id;
+                        return false;
+                    }
+                })
+                    .autocomplete("instance")._renderItem = function (ul, item) {
+                        return $("<li>")
+                        .append(item.name + ' / ' + item.info_short)
+                        .appendTo(ul);
+                };
+            });
+
+            // bouton filtrer
+            $('#filter').click(function(){
+                let $param = null;
+                if ($projects.length > 0) {
+                    $param = '';
+                    for (let i=0; i<$projects.length; i++) {
+                        if ($projects.length > 1 && i !== 0){
+                            $param += ('and' + $projects[i].id);
+                        } else {
+                            $param += $projects[i].id;
+                        }
                     }
                 }
-            })
-                .autocomplete("instance")._renderItem = function (ul, item) {
-                return $("<li>")
-                    .attr( "data-value", item.value )
-                    .append(item.name)
-                    .appendTo(ul);
-            };
+                // console.log($projects);
+                // console.log($param);
+                window.location.href = $originURL + "/admin/project/category/" + $param;
+            });
+
+            // boutons checkboxes et radios
+            $('.form-check').each(function () {
+                // const $input = $(this).find('input')['prevObject'][0]; // console.log($input);
+                const $input = $(this).find('input'); // console.log($input);
+                // const $index = $(this).find('input')[0]['id']; // console.log($index);
+                const $type = $(this).find('input')[0]['type']; // console.log($type);
+                const $checked = $(this).find('input')[0]['checked']; // console.log($checked);
+                const $label = $(this).find('label')[0]['innerText']; // console.log($label);
+                const $id = $(this).find('input')[0]['id'].replace(/^[a-zA-Z]+/, '');
+
+                // tableau contenant toutes les checkboxes
+                let project = {};
+                // if ($checked && $type === 'checkbox') {
+                //     $projects.push( new Project($id, $label) );
+                // }
+
+                // évènements pour les boutons checkboxes et radios
+                $input.change(function (e){
+                    e.preventDefault();
+
+                    // boutons radios
+                    if ($input.is(":checked") && $input[0].getAttribute('type') === "radio") {
+                        window.location.href = $originURL + '/admin/project/type/' + $id;
+                    }
+
+                    // boutons checkboxes
+                    if ($input.is(":checked") && $input[0].getAttribute('type') === "checkbox") {
+                        $projects.push( new Project($id, $input[0].offsetParent.innerText) );
+                        $projects.sort(orderedASC); // console.log($projects);
+                    } else if (!$input.is(":checked") && $input[0].getAttribute('type') === "checkbox") {
+                        $projects.splice($projects.indexOf(project[$id]), 1); // console.log($projects);
+                    }
+                    // console.log($projects);
+                })
+            });
+            // console.log($projects);
         });
-
-        let $projects = [];
-        $('.form-check-input').each(function (){
-            $(this).change(function(e){
-                e.preventDefault();
-                const $originURL = window.location.origin;
-                // const $originURL = window.location.href;
-                const $index = this.getAttribute('id');
-                let $id = $index.replace(/^[a-zA-Z]+/, '');
-
-                if ( $(this).is(":checked") && $index.includes('Type') )
-                {
-                    window.location = $originURL + '/admin/project/type/' + $id;
-                }
-
-                if ( $(this).is(":checked") && $index.includes('Category') )
-                {
-                    console.log($index);
-                    console.log($id);
-                    $projects.push($id);
-                    console.log($projects);
-                } else if ( !$(this).is(":checked") && $index.includes('Category') ) {
-                    $projects.splice($projects.indexOf($id), 1);
-                    console.log($projects);
-                }
-            })
-        })
-        console.log(window.location.href);
-
-
 </script>
 
 
