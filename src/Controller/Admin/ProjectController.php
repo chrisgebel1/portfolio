@@ -9,8 +9,10 @@ use App\Repository\ProjectRepository;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -219,7 +221,7 @@ class ProjectController extends AbstractController
     }
 
 
-//    fonctions pour les projets \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//    fonctions pour les projets (créer ou modifier) \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     /**
      * @Route("/edit/{id}", defaults={"id"=null}, requirements={"id":"\d+"})
      */
@@ -447,9 +449,7 @@ class ProjectController extends AbstractController
             array_splice($images, $img, 1);
             //dump($images);die();
 
-            $project->setFiles(
-                $images
-            );
+            $project->setFiles($images);
 
             $entityManager->persist($project);
             $entityManager->flush();
@@ -460,6 +460,95 @@ class ProjectController extends AbstractController
                 'projet' => $id,
                 'image' => $img
             ],200);
+        }
+    }
+
+    /**
+     * @Route("/ajaximageprojectorder/")
+     */
+    public function ajaxImageProjectOrder(
+        EntityManagerInterface $entityManager,
+        TypeRepository $typeRepository,
+        ProjectRepository $projectRepository)
+    {
+        $types = $typeRepository->findBy(
+            [],
+            ['id'=>'DESC']
+        );
+
+        if ( isset($_POST['project']) && isset($_POST['img']) && isset($_POST['indexImg']) && isset($_POST['order']) ) {
+            $p = $_POST['project'];
+            $img = $_POST['img'];
+            $i = $_POST['indexImg'];
+            $o = $_POST['order'];
+
+            $response = new JsonResponse();
+
+            if ( is_numeric($p) && preg_match("/(?:(\w+\.\w+))$/", $img) && is_numeric($i) && preg_match("/(^(left|right))$/", $o) ) {
+                $project = $projectRepository->find($p);
+
+                if ( $project ) {
+                    // si le projet existe
+                    $images = $project->getFiles();
+
+                    if ( $images && $images[$i] == $img ) {
+                        // si l'image existe et que le le nom et le numéro de l'index de l'image concordent
+                        $nbrImages = count($images);
+
+                        if ( $nbrImages > 1 ) {
+                            // si il y a plus d'une image
+                            $j=$i; // $j est la position d'insertion de l'images à sa nouvelle place
+
+                            if ( $o == 'right' ) {
+                                // si on déplace l'image vers la droite
+                                // si l'image est la dernière elle devient la première
+                                $i == ($nbrImages-1) ? $j=0 : $j++;
+                            } elseif ( $o == 'left' ) {
+                                // si on déplace l'image vers la gauche
+                                // si l'image est la première elle devient la dernière
+                                $i == 0 ? $j=$nbrImages-1 : $j--;
+                            }
+
+                            $old = $images; // ancien array des images
+                            $t = array_slice($images, $i, 1); // image déplacée
+                            unset($images[$i]); // image supprimée de son ancien emplacement
+                            array_splice($images, $j, 0, $t); // insertion de l'image à sa nouvelle place
+
+                            $project->setFiles($images);
+
+                            $entityManager->persist($project);
+                            $entityManager->flush();
+
+                            $response->setData(array(
+                                'status'    => 'success',
+                                'message'   => 'move_OK',
+                                'oldTab'    => $old,
+                                'newTab'    => $images,
+                                'html'=> $this->renderView('admin/_imagesProject.html.twig',
+                                    [
+                                        'original_image'    => $images,
+                                        'project'           => $project,
+                                        'types'             => $types
+                                    ])
+                            ));
+
+
+                        }
+
+                    } else {
+                        $response->setData(array('status'=>'error', 'message'=>'l\'image n\'existe pas ou erreur de concordance entre le nom et le numéro de l\'image'));
+                    }
+
+                } else {
+                    $response->setData(array('status'=>'error', 'message'=>'le project n\'existe pas'));
+                }
+
+
+            } else {
+                $response->setData(array('status'=>'error', 'message'=>'Erreur de la requête'));
+            }
+
+            return $response;
         }
     }
 

@@ -12,7 +12,7 @@ Le site est organisé de la façon suivante :<br>
   => La partie back-office se trouve bien évidemment sur d'autres pages avec barre de navigation secondaire.<br>
 <br>
 Dans la partie back-office, il est possible de créer/modifier/supprimer des projets, catégories, types et utilisateurs.<br>
-Il y a également un affichage de différentes informations (nombre d'inscrits total et pour chaque rôle; nombre de projets total et pour chaque type).
+Il y a également un affichage de différentes informations (nombre d'inscrits total et pour chaque rôle; nombre de projets total et pour chaque type).<br>
 <br>
 Un objet PROJECT aura les propriétés suivantes (creation/modification/suppression par Admin uniquement) :<br>
   => Nom de projet<br>
@@ -21,6 +21,7 @@ Un objet PROJECT aura les propriétés suivantes (creation/modification/suppress
   => Ajout d'une ou plusieurs images<br>
   => Une description courte (attribut html alt et title pour les images)<br>
   => Une description plus longue concernant le projet<br>
+  => Il est possible de modifier l'odre des images lors de l'édition d'un project<br>
   <br>
 Il existe deux entités TYPE et CATEGORIE permettant de classer les projets:<br>
   => Type : permet de regrouper des catégories sous un même type (ex: web, retouche image...)<br>
@@ -35,9 +36,18 @@ Enfin, pour gérer le site, une entité USER existe (creation/modification/suppr
   => Date de dernier logout<br>
   <br>
   => Seul la modification du rôle et la suppression de l'utilisateur est possible par un Admin<br>
-  => Un Admin ne pourra pas supprimer/modifier son propre rôle
+  => Un Admin ne pourra pas supprimer/modifier son propre rôle<br>
 <br>
-En tant que simple ROLE_USER, il est simplement possible de modifier son pseudo et son mot de passe sur une page privée.<br>
-<br><br>
+=> En tant que simple ROLE_USER, il est simplement possible de modifier son pseudo et son mot de passe sur une page privée.<br>
+<br>
+Utilisation des langages, framework, librairies...  :<br>
+=> HTML / CSS <br>
+=> Bootstrap <br>
+=> JavaScript <br>
+=> jQuery <br>
+=> SQL <br>
+=> PHP <br>
+=> Symfony <br>
+=> AJAX (modification de l'ordre des images d'un projet, changement de rôle d'un utilisateur)<br>
 
 Le site n'est pas encore en ligne !.

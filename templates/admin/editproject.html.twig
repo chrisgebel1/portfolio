@@ -37,32 +37,42 @@
 
                     {{ form_end(form) }}
 
-                    <div class="d-flex flex-wrap justify-content-start">
-                        {% if original_image %}
-                            <div class="p-1 w-100 mx-auto mb-3 mt-4 bg-primary rounded text-white">Image(s) du projet</div>
-                        {% for image in original_image %}
-                            {% if loop.last and loop.length > 1 %}
-                                {% set margeRight = "" %}
-                            {% else %}
-                                {% set margeRight = "mr-2" %}
-                            {% endif %}
-                                <div id="imageIndex{{ loop.index0 }}" class="container-delete {{ margeRight }} mb-5">
-                                    <a href="{{ path('app_admin_project_ajaxdeleteoneimageproject', {'id': project.id, 'img': loop.index0}) }}"
-                                       data-indexImage="{{ loop.index0 }}" class="delete-img-btn"
-                                       onclick="return(confirm('Etes-vous sûr de vouloir supprimer l\'image {{ loop.index }} ?'))">
-                                        <img src="{{ asset('img/portfolio/'~image) }}" alt="" width="125px" class="img-thumbnail deleteBtn" id="{{ loop.index0 }}">
-                                    <div class="delete-img-btn-legend h-100">
-                                        <p>Supprimer</p>
-                                    </div>
-                                    </a>
-                                </div>
+                    {# Messages Flash #}
+                    {% include 'admin/_imagesProject.html.twig' %}
 
-                        {% endfor %}
-                        {% else %}
-                            <div class="p-1 w-100 mx-auto mb-3 mt-4 bg-primary rounded text-white">Il n'y a pas d'image(s) pour ce projet</div>
-                        {% endif %}
+{#                    <div class="d-flex flex-wrap justify-content-start">#}
+{#                        {% if original_image %}#}
+{#                            <div class="p-1 w-100 mx-auto mb-3 mt-4 bg-primary rounded text-white">Image(s) du projet</div>#}
+{#                        {% for image in original_image %}#}
+{#                            {% if loop.last and loop.length > 1 %}#}
+{#                                {% set margeRight = "" %}#}
+{#                            {% else %}#}
+{#                                {% set margeRight = "mr-2" %}#}
+{#                            {% endif %}#}
+{#                                <div id="imageIndex{{ loop.index0 }}" class="container-delete {{ margeRight }} mb-5">#}
+{#                                        <img src="{{ asset('img/portfolio/'~image) }}" alt="" width="125px" class="img-thumbnail deleteBtn" id="{{ loop.index0 }}">#}
+{#                                    <div class="delete-img-btn-legend h-100 d-flex flex-column">#}
+{#                                        <div>#}
+{#                                            <a href="{{ path('app_admin_project_ajaxdeleteoneimageproject', {'id': project.id, 'img': loop.index0}) }}"#}
+{#                                           data-indexImage="{{ loop.index0 }}" class="delete-img-btn text-white"#}
+{#                                           onclick="return(confirm('Etes-vous sûr de vouloir supprimer l\'image {{ loop.index }} ?'))">#}
+{#                                                Supprimer#}
+{#                                            </a>#}
+{#                                        </div>#}
+{#                                        <div class="mt-3">#}
+{#                                            <a href="" class="text-white mr-3 order-move" data-order="{{ project.id }}-{{ loop.index0 }}-left" title="Modifier l'ordre"><i class="fas fa-angle-left"></i></a>#}
+{#                                            <a href="" class="text-white ml-3 order-move" data-order="{{ project.id }}-{{ loop.index0 }}-right" title="Modifier l'ordre"><i class="fas fa-angle-right"></i></a>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
 
-                    </div>
+{#                        {% endfor %}#}
+{#                        {% else %}#}
+{#                            <div class="p-1 w-100 mx-auto mb-3 mt-4 bg-primary rounded text-white">Il n'y a pas d'image(s) pour ce projet</div>#}
+{#                        {% endif %}#}
+
+{#                    </div>#}
+                    <div class="mt-5"></div>
 
             </div>
             </div>
@@ -82,18 +92,86 @@
     {# rollover des vignettes suppmrimer image du projet #}
     <script type="text/javascript">
         $(document).ready( function(){
-            "use strict";
+            // "use strict";
 
-            $(".container-delete").mouseenter( function (){
-                $(".delete-img-btn-legend",
-                    // this).stop().animate({"top":"0%",}, 200, 'swing');
-                    this).stop().fadeTo(50, 1);
+            // $(".container-delete").mouseenter( function (){
+            //     $(".delete-img-btn-legend",
+            //         // this).stop().animate({"top":"0%",}, 200, 'swing');
+            //         this).stop().fadeTo(50, 1);
+            // });
+            // $(".container-delete").mouseleave( function (){
+            //     $(".delete-img-btn-legend",
+            //         // this).stop().animate({"top":"100%",}, 200, 'swing');
+            //         this).stop().fadeTo(50, 0);
+            // });
+
+            $(document).on('click', '.order-move', function(e){
+                e.preventDefault();
+
+                // console.log($(this)[0].dataset.order);
+               // console.log($(this)[0].offsetParent.offsetParent.children[0].src);
+                const $params = $(this)[0].dataset.order.split('-');
+                const $p = $params[0];
+                const $i = $params[1];
+                const $o = $params[2];
+
+                const $regex = /(?:(\w+\.\w+))$/gm;
+                const $pathImg = $(this)[0].offsetParent.offsetParent.children[0].src;
+                const $img = (RegExp($regex).exec($pathImg))[0];
+
+                // console.log($params);
+
+                const $responseConfirm = confirm('Voulez-vous vraiment modifier l\'odre ?');
+                /* response => true (OK) ou false (ANNULER) */
+
+                if ($responseConfirm) {
+                    // console.log($paramProject);
+                    // console.log($paramIndexImg);
+                    // console.log($paramOrder);
+
+                    $.ajax({
+                        url:"{{ path('app_admin_project_ajaximageprojectorder') }}",
+                        method:"POST",
+                        data:{
+                            project: $p,
+                            img: $img,
+                            indexImg: $i,
+                            order: $o
+                        },
+                        dataType: "json",
+                        success:function(data)
+                        {
+                            if ( data.status === 'success' ) {
+                                // console.log(data);
+                                $(".project-images").replaceWith(data.html);
+
+                            } else if ( data.status === 'error' ) {
+                                console.log(data);
+                            }
+
+                        },
+                        error:function(x,e) {
+                            if (x.status==0) {
+                                alert('You are offline!!\n Please Check Your Network.');
+                            } else if(x.status==404) {
+                                alert('Requested URL not found.');
+                            } else if(x.status==500) {
+                                alert('Internel Server Error.');
+                            } else if(e=='parsererror') {
+                                alert('Error.\nParsing JSON Request failed.');
+                            } else if(e=='timeout'){
+                                alert('Request Time out.');
+                            } else {
+                                alert('Unknow Error.\n'+x.responseText);
+                            }
+                        }
+                    });
+
+                }
+
             });
-            $(".container-delete").mouseleave( function (){
-                $(".delete-img-btn-legend",
-                    // this).stop().animate({"top":"100%",}, 200, 'swing');
-                    this).stop().fadeTo(50, 0);
-            });
+
+
         });
     </script>
 

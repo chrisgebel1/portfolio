@@ -68,12 +68,10 @@
                         </div>
                     </div>
                 </div>
-                {% if app.session.flashbag.all %}
-                    <div class="col-12">
-                        {# Messages Flash #}
-                        {% include '_messageFlash.html.twig' %}
-                    </div>
-                {% endif %}
+                <div class="col-12">
+                    {# Messages Flash #}
+                    {% include '_messageFlash.html.twig' %}
+                </div>
             </div>
         </div>
     </header>
