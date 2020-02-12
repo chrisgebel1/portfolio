@@ -17,10 +17,12 @@
                             Supprimer
                         </a>
                     </div>
-                    <div class="mt-3">
-                        <div class="d-inline text-white mr-3 order-move" data-order="{{ project.id }}-{{ loop.index0 }}-left" title="Modifier l'ordre"><i class="fas fa-angle-left"></i></div>
-                        <div class="d-inline text-white ml-3 order-move" data-order="{{ project.id }}-{{ loop.index0 }}-right" title="Modifier l'ordre"><i class="fas fa-angle-right"></i></div>
-                    </div>
+                    {% if original_image|length > 1 %}
+                        <div class="mt-3">
+                            <div class="d-inline text-white mr-3 order-move" data-order="{{ project.id }}-{{ loop.index0 }}-left" title="Modifier l'ordre"><i class="fas fa-angle-left"></i></div>
+                            <div class="d-inline text-white ml-3 order-move" data-order="{{ project.id }}-{{ loop.index0 }}-right" title="Modifier l'ordre"><i class="fas fa-angle-right"></i></div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
