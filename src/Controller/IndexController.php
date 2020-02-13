@@ -24,7 +24,11 @@ class IndexController extends AbstractController
     {
         $projects = $projectRepository->findAll();
         $types = $typeRepository->findAll();
-        $categories = $categoryRepository->findAll();
+//        $categories = $categoryRepository->findAll();
+        $categories = $categoryRepository->findBy(
+            [],
+            ['name' => 'ASC']
+        );
 
         // sélectionner aléatoirement au minimum 3 projets de chaque type si possible
         // il faut un total de 6 projets à afficher
@@ -37,9 +41,7 @@ class IndexController extends AbstractController
         if ( count($types) > 0 ) {
             foreach ( $types as $type ) {
                 $p = $projectRepository->findBy(
-                    [ 'type'    => $type->getId() ],
-                    [ 'id'      => 'DESC'  ],
-                    $totalProjects
+                    [ 'type'    => $type->getId() ]
                 );
                 $typProjects[$type->getId()] = $p;
             }
@@ -57,7 +59,7 @@ class IndexController extends AbstractController
                         $randomProject = array_slice($typProjectsById, rand(0, count($typProjectsById)-1), 1)[0]; // sélection aléatoire d'un projet
                         $exist = false;
                         foreach ($selectProjects as $p) { // on vérifie qu'on ne l'a pas déjà sélectionné
-                            if ($randomProject->getId() == $p->getId()) {
+                            if ( $randomProject->getId() == $p->getId() || $randomProject->getName() == $p->getName() ) {
                                 $exist = true;
                                 break;
                             }
@@ -78,6 +80,12 @@ class IndexController extends AbstractController
             }
             shuffle($selectProjects); // mélange l'ordre des projets sélectionnés
             $projects = $selectProjects;
+
+//            $toto=[];
+//            foreach ( $projects as $project ) {
+//                $toto[] = $project->getName();
+//            }
+//            dump($toto);die();
         }
 
 

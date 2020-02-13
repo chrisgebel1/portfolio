@@ -44,29 +44,35 @@
                            aria-expanded="false" aria-controls="collapseWF3">
                             <small>Plus d'infos...</small>
                         </a>
-                        <div class="collapse" id="collapseWF3">
-                            <div class="card card-body bg-card text-white">
-                                <h6 class="text-white-50">Ojectifs de la formation :</h6>
-                    <p>Réaliser l'intégration HTML/CSS dans le respect des normes et des bonnes pratiques, pour tout
-                        type de terminaux.</p>
-                    <p>Concevoir des pages web intéractives avec Javascript, utiliser Ajax et la librairie jQuery,
-                        connaître les bases d'Angular.</p>
-                    <p>Créer, structurer et exploiter une base de donnée MySQL.</p>
-                    <p>Réaliser un site web ou un blog à l'aide du CMS WordPress.</p>
-                    <p>Utiliser le language PHP et en comprendre la logique sous-jacente afin de réaliser des
-                        applications PHP complexes.</p>
-                    <p>Réaliser un site web complexe avec Symfony.</p>
+                    </p>
+                    <div class="collapse" id="collapseWF3">
+                        <div class="card card-body bg-card text-white">
+                            <h6 class="text-white-50">Ojectifs de la formation :</h6>
+                            <p>Réaliser l'intégration HTML/CSS dans le respect des normes et des bonnes pratiques, pour tout
+                                type de terminaux.
+                            </p>
+                            <p>Concevoir des pages web intéractives avec Javascript, utiliser Ajax et la librairie jQuery,
+                                connaître les bases d'Angular.
+                            </p>
+                            <p>Créer, structurer et exploiter une base de donnée MySQL.
+                            </p>
+                            <p>Réaliser un site web ou un blog à l'aide du CMS WordPress.
+                            </p>
+                            <p>Utiliser le language PHP et en comprendre la logique sous-jacente afin de réaliser des
+                                applications PHP complexes.
+                            </p>
+                            <p>Réaliser un site web complexe avec Symfony.
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="divider light my-4">
+                    <h6 class="text-white">Ecole Supérieure Estienne des Arts et Industries Graphiques</h6>
+                    <p class="text-white-50 mb-4">
+                        BTS Communication Graphique <small>(1995)</small><br>
+                        BT Industries Graphiques (Photogravure) <small>(1993)</small>
+                    </p>
                 </div>
             </div>
-            </p>
-            <hr class="divider light my-4">
-            <h6 class="text-white">Ecole Supérieure Estienne des Arts et Industries Graphiques</h6>
-            <p class="text-white-50 mb-4">
-                BTS Communication Graphique <small>(1995)</small><br>
-                BT Industries Graphiques (Photogravure) <small>(1993)</small>
-            </p>
-        </div>
-        </div>
         </div>
     </section>
 
@@ -136,9 +142,10 @@
                     <span class="text-white-50">Création du pôle Photogravure (sélection et mise en place des matériels, mise en place des process<br>et des flux automatiques de création des PDF HiRes et d'épreuves contractuelles).<br>
 		Formation et accompagnement des équipes de maquettiste à l'utilisation de ces flux.</span></small></p>
             <p class="text-white">Ray Productions <small>(Plateforme de production) 2004 à 2007<br>
-                    <span class="text-primary op50">Maquettiste PAO.</span></small><br></p>
+                    <span class="text-primary op50">Maquettiste PAO.</span></small><br>
+            </p>
             <p class="text-white">Wunderman <small> (Agence de Marquetting Direct) 2001 à 2004<br>
-                    <span class="text-primary op50">Maquettiste PAO.</span></small></p>
+                    <span class="text-primary op50">Maquettiste PAO.</span></small>
             </p>
             <hr class="divider my-4">
             <h6 class="text-white">Mereau (Editeur de presse) 1999 à 2001</h6>
@@ -154,15 +161,24 @@
     </section>
 
     <!-- Portfolio Section https://mdbootstrap.com/plugins/jquery/gallery/ -->
-    <section class="page-section" id="portfolio">
-        <div class="text-center">
-            <h2 class="mb-4">Portfolio</h2>
-            <hr class="divider my-4">
-            <h5 class="text-primary font-weight-bold mb-4">
-            {% for type in types %}
-                {{ type.name }} {{ (loop.index0 == 0) ? ' | ' : '' }}
-            {% endfor %}
-            </h5>
+    <section class="page-section bg-primary" id="portfolio">
+        <div class="text-center mb-2 col-10 col-md-12 mx-auto">
+            <h2 class="mb-4 text-white">Portfolio</h2>
+            <hr class="divider light my-4">
+{#            <div>#}
+{#                <h5 class="text-white font-weight-bold">#}
+{#                    {% for type in types %}#}
+{#                        {{ type.name|replace({" / ": "&nbsp;/&nbsp;"})|raw }}{{ (loop.last) ? '' : '<span class="font-weight-bold text-white-50">&nbsp;| </span>' }}#}
+{#                    {% endfor %}#}
+{#                </h5>#}
+{#            </div>#}
+{#            <div>#}
+{#                <h6 class="text-white">#}
+{#                    {% for category in categories %}#}
+{#                        {{ category.name|replace({" / ": "&nbsp;/&nbsp;"})|raw }}{{ (loop.last) ? '' : '<span class="font-weight-bold text-white-50">&nbsp;| </span>' }}#}
+{#                    {% endfor %}#}
+{#                </h6>#}
+{#            </div>#}
         </div>
         <div class="container-fluid p-0 bg-primary py-3 py-md-5">
             <div class="row no-gutters col-12 col-md-10 mx-auto">
@@ -174,7 +190,7 @@
                                 <img class="img-fluid img-fluid-home img-fit"
                                      src="{{ asset('img/portfolio/' ~ project.files[0]) }}"
                                      alt="{{ project.infoShort }}">
-{#                                <div class="portfolio-box-caption" {{ (project.type|lower == 'web') ? 'style="background-color:rgba(108, 117, 125, .9);"' }}>#}
+                                {#                                <div class="portfolio-box-caption" {{ (project.type|lower == 'web') ? 'style="background-color:rgba(108, 117, 125, .9);"' }}>#}
                                 <div class="portfolio-box-caption bg-dark">
                                     <div class="project-category text-white-50">
                                         {{ project.type }}
