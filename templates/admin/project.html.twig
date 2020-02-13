@@ -199,17 +199,10 @@
     {# JS lightbox #}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
     <script src="{{ asset('js/ekko-lightbox.js') }}"></script>
 
-
-    <script>
-        let $source = '{{ path('app_index_searchproject') }}';
-    </script>
-
+    {# pour la sidebar recherche, tri affichage des projets #}
+    <script type="text/javascript">let $source = '{{ path('app_index_searchproject') }}';</script>
     <script src="{{ asset('js/search-project.js') }}"></script>
-
-
-
 
 {% endblock %}
