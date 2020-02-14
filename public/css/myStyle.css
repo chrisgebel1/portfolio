@@ -15,6 +15,23 @@ body {
 #mainNav .fa-lock-open, #mainNav .fa-lock {
 	transform: translateY(-2px);
 }
+
+/* hover drop-down-menu */
+.dropdown>.dropdown-menu {
+	top: 200%;
+	transition: 0.3s all ease-in-out;
+}
+.dropdown:hover>.dropdown-menu {
+	display: block;
+	top: 100%;
+}
+
+.dropdown>.dropdown-toggle:active {
+	/*Without this, clicking will make it sticky*/
+	pointer-events: none;
+}
+/* FIN hover drop-down-menu */
+
 /* FIN navbar principale \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
 
 /* navbar backOffice \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
@@ -37,6 +54,9 @@ body {
 }
 /* FIN navbar backOffice \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
 
+.page-section {
+	padding: 4rem 0;
+}
 
 .portrait {
 	width: 215px;
@@ -172,6 +192,15 @@ table {
 	width: fill-available;
 }
 
+@media (min-width: 768px) {
+	.pb-md-5, .py-md-5 {
+		padding-bottom: 0 !important;
+	}
+}
+
+#mix-projects {
+	cursor: pointer;
+}
 
 /* footer \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ */
 

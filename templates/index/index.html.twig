@@ -135,12 +135,12 @@
         <div class="container text-center">
             <h2 class="mb-4">Expérience Professionnelle</h2>
             <hr class="divider my-4">
-            <h6 class="text-white">VMLY&R Paris {Groupe WPP France} 2001 à 2019</h6>
-            <p class="mb-4">
+            <h6 class="text-white mb-4">VMLY&R Paris {Groupe WPP France} 2001 à 2019</h6>
             <p class="text-white">Ray Productions <small>2007 à 2019<br>
                     <span class="text-primary op50">Responsable du pôle photogravure, retoucheur et maquettiste PAO.</span><br>
                     <span class="text-white-50">Création du pôle Photogravure (sélection et mise en place des matériels, mise en place des process<br>et des flux automatiques de création des PDF HiRes et d'épreuves contractuelles).<br>
-		Formation et accompagnement des équipes de maquettiste à l'utilisation de ces flux.</span></small></p>
+		Formation et accompagnement des équipes de maquettiste à l'utilisation de ces flux.</span></small>
+            </p>
             <p class="text-white">Ray Productions <small>(Plateforme de production) 2004 à 2007<br>
                     <span class="text-primary op50">Maquettiste PAO.</span></small><br>
             </p>
@@ -149,12 +149,12 @@
             </p>
             <hr class="divider my-4">
             <h6 class="text-white">Mereau (Editeur de presse) 1999 à 2001</h6>
-            <p class="text-white-50 mb-4">
+            <p class="mb-4">
                 <small class="text-primary op50">Scanneriste et retoucheur.</small>
             </p>
             <hr class="divider my-4">
             <h6 class="text-white">La Société (Photogravure) 1994 à 1999</h6>
-            <p class="text-white-50 mb-4">
+            <p class="mb-4">
                 <small class="text-primary op50">Maquettiste PAO, scanneriste et retoucheur.</small>
             </p>
         </div>
@@ -165,7 +165,12 @@
         <div class="text-center mb-2 col-10 col-md-12 mx-auto">
             <h2 class="mb-4 text-white">Portfolio</h2>
             <hr class="divider light my-4">
-{#            <div>#}
+            <h6>
+                <div class="text-white d-inline" id="mix-projects">Mix sélection de projets</div>
+                <span class="font-weight-bold text-white-50">&nbsp;&#8226; </span> {# puce ronde #}
+                <a href="" class="text-white">Voir tous les projets</a>
+            </h6>
+            {#            <div>#}
 {#                <h5 class="text-white font-weight-bold">#}
 {#                    {% for type in types %}#}
 {#                        {{ type.name|replace({" / ": "&nbsp;/&nbsp;"})|raw }}{{ (loop.last) ? '' : '<span class="font-weight-bold text-white-50">&nbsp;| </span>' }}#}
@@ -180,41 +185,17 @@
 {#                </h6>#}
 {#            </div>#}
         </div>
-        <div class="container-fluid p-0 bg-primary py-3 py-md-5">
-            <div class="row no-gutters col-12 col-md-10 mx-auto">
-                {% if projects and projects|length > 0 %}
-                    {% for project in projects %}
-                        <div class="col-lg-4 col-sm-6 position-relative div-portfolio">
-                            <a class="portfolio-box m-2" href="{{ asset('img/portfolio/' ~ project.files[0]) }}"
-                               title="{{ project.infoShort }}">
-                                <img class="img-fluid img-fluid-home img-fit"
-                                     src="{{ asset('img/portfolio/' ~ project.files[0]) }}"
-                                     alt="{{ project.infoShort }}">
-                                {#                                <div class="portfolio-box-caption" {{ (project.type|lower == 'web') ? 'style="background-color:rgba(108, 117, 125, .9);"' }}>#}
-                                <div class="portfolio-box-caption bg-dark">
-                                    <div class="project-category text-white-50">
-                                        {{ project.type }}
-                                    </div>
-                                    <div class="project-category">
-                                        {{ project.category }}
-                                    </div>
-                                    <div class="project-name">
-                                        {{ project.name }}
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
+        <div class="container-fluid p-0 bg-primary py-3 py-md-5" id="projects">
+            {# projects-homepage #}
+            {% include 'index/_projects-homepage.html.twig' %}
         </div>
 
     </section>
 
 
     <!-- Contact Section -->
-    <section class="page-section bg-dark text-white" id="contact">
-        <div class="container">
+    <section class="page-section bg-dark text-white mb-5" id="contact">
+        <div class="container mb-2">
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center">
                     <h2 class="mt-0">Pour me contacter</h2>
@@ -244,7 +225,13 @@
         </div>
     </section>
 
+{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
 
+    {# afficher 6 autres projets #}
+    <script type="text/javascript">const $url = "{{ path('app_index_mixprojects') }}";</script>
+    <script src="{{ asset('js/mix-projects.js') }}"></script>
 
 {% endblock %}

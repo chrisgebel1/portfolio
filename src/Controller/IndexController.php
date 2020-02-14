@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TypeRepository;
+use App\Service\ProjectsHome;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,75 +21,18 @@ class IndexController extends AbstractController
     /**
      * @Route("/")
      */
-    public function index(ProjectRepository $projectRepository, TypeRepository $typeRepository, CategoryRepository $categoryRepository)
+    public function index(ProjectRepository $projectRepository, TypeRepository $typeRepository, CategoryRepository $categoryRepository, ProjectsHome $projectsHome)
     {
-        $projects = $projectRepository->findAll();
+//        $projects = $projectRepository->findAll();
         $types = $typeRepository->findAll();
-//        $categories = $categoryRepository->findAll();
-        $categories = $categoryRepository->findBy(
-            [],
-            ['name' => 'ASC']
-        );
+        $categories = $categoryRepository->findAll();
+//        $categories = $categoryRepository->findBy(
+//            [],
+//            ['name' => 'ASC']
+//        );
 
-        // sélectionner aléatoirement au minimum 3 projets de chaque type si possible
-        // il faut un total de 6 projets à afficher
-
-        $maxProjectsByType = 3; // nbre de projet à afficher par type
-        $totalProjects = $maxProjectsByType * ( count($types) ); // nbre total de projets à afficher
-        $selectProjects = []; // les projets à afficher
-        $typProjects = []; // sélection des projets par type avec une limite
-
-        if ( count($types) > 0 ) {
-            foreach ( $types as $type ) {
-                $p = $projectRepository->findBy(
-                    [ 'type'    => $type->getId() ]
-                );
-                $typProjects[$type->getId()] = $p;
-            }
-
-            while ( count($selectProjects) < $totalProjects ) {
-
-                foreach ( $typProjects as $typProject ) { // $typVal tous les projets du type
-
-                    $typProjectsById = []; // contient les projets du même type indexés par l'ID du projet
-                    foreach ( $typProject as $project ) {
-                        $typProjectsById[$project->getId()] = $project;
-                    }
-
-                    if ( count($typProject) > 0 ) {
-                        $randomProject = array_slice($typProjectsById, rand(0, count($typProjectsById)-1), 1)[0]; // sélection aléatoire d'un projet
-                        $exist = false;
-                        foreach ($selectProjects as $p) { // on vérifie qu'on ne l'a pas déjà sélectionné
-                            if ( $randomProject->getId() == $p->getId() || $randomProject->getName() == $p->getName() ) {
-                                $exist = true;
-                                break;
-                            }
-                        }
-
-                        if (!$exist) { // si on ne l'a pas déjà sélectionné on l'enregistre dans les projets à afficher
-                            foreach($typProject as $project) {
-                                if ($project->getId() == $randomProject->getId()) {
-                                    $selectProjects[] = $randomProject;
-                                    break;
-                                }
-                            }
-
-                        }
-
-                    }
-                }
-            }
-            shuffle($selectProjects); // mélange l'ordre des projets sélectionnés
-            $projects = $selectProjects;
-
-//            $toto=[];
-//            foreach ( $projects as $project ) {
-//                $toto[] = $project->getName();
-//            }
-//            dump($toto);die();
-        }
-
-
+        /* voir méthode de la classe ProjectsHome dans service */
+        $projects = $projectsHome->projectsHome($projectRepository, $typeRepository);
 
         return $this->render(
             'index/index.html.twig',
@@ -99,6 +43,47 @@ class IndexController extends AbstractController
             ]
         );
     }
+
+
+    /**
+     * @Route("/mix-projects")
+     */
+    public function mixProjects(ProjectRepository $projectRepository, TypeRepository $typeRepository, ProjectsHome $projectsHome)
+    {
+        $response = new JsonResponse();
+        $types = $typeRepository->findAll();
+
+        /* voir méthode de la classe ProjectsHome dans service */
+        $projects = $projectsHome->projectsHome($projectRepository, $typeRepository);
+
+        if ( count($projects) > 0 ) {
+            $response->setData(
+                [
+                    'status'    => 'success',
+                    'message'   => 'Projets sélectionnés',
+                    'html'      => $this->renderView('index/_projects-homepage.html.twig',
+                        [
+                            'projects'  => $projects,
+                            'types'     => $types
+                        ]
+                    )
+                ]
+            );
+        } else {
+            $response->setData(
+                [
+                    'status'    => 'error',
+                    'message'   => 'Aucun projet sélectionné'
+                ]
+            );
+        }
+
+        return $response;
+    }
+
+
+
+
 
     /**
      * @param Request $request
