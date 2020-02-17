@@ -180,6 +180,11 @@ table {
 	-webkit-filter: blur(3px);
 	opacity: 50%;
 }
+
+.div-portfolio {
+	padding: .5rem !important;
+}
+
 .portfolio-box .img-fit {
 	/*width: auto;*/
 	height: 100%;

@@ -1,6 +1,4 @@
 {% block error %}
-    {#{% dump(app.session.flashbag.all|length) %}#}
-    {#{% if app.session.flashbag.all|length > 0 %}#}
     <div class="form-group col-12 mx-auto flash-message">
         {# affiche des messages flash #}
         {% for type, messages in app.session.flashbag.all  %}
@@ -15,5 +13,4 @@
             {% endfor %}
         {% endfor %}
     </div>
-    {#{% endif %}#}
 {% endblock %}

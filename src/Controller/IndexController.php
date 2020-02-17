@@ -20,6 +20,11 @@ class IndexController extends AbstractController
 {
     /**
      * @Route("/")
+     * @param ProjectRepository $projectRepository
+     * @param TypeRepository $typeRepository
+     * @param CategoryRepository $categoryRepository
+     * @param ProjectsHome $projectsHome
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index(ProjectRepository $projectRepository, TypeRepository $typeRepository, CategoryRepository $categoryRepository, ProjectsHome $projectsHome)
     {

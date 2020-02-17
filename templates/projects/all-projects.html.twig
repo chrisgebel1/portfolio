@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Projets{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {# Theme CSS perso #}
+    <link href="{{ asset('css/projects.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+    <!-- Masthead -->
+{#    <header class="masthead-projects mastheadSimple Merriweather bg-dark">#}
+{#        <div class="container h-100">#}
+{#            <div class="row h-100 a align-items-sm-start align-items-md-center">#}
+{#            </div>#}
+{#        </div>#}
+{#    </header>#}
+
+    <main id="main" class="mb-5">
+
+        <div class="site-section pb-0 site-portfolio mb-5">
+            <div class="container">
+                <div class="mx-2 mx-md-0 mb-3">
+                    <div class="mb-lg-0" data-aos="fade-up">
+                        <h2>Mes Projets</h2>
+                        <p class="mb-0">Voici une sélection des projets réalisés au cours de mon parcours professionnel, quelque soit leur genre !</p>
+                    </div>
+                </div>
+                <div class="mx-2 mx-md-0 mb-3">
+                    <div class="text-left text-lg-right" data-aos="fade-up" data-aos-delay="100">
+                        <div id="filters" class="filters">
+                            {% if types %}
+                                <a href="#" data-filter="*" class="active" title="Aucun filtre">Tout</a>{{ "&nbsp;&bull; "|raw }}
+                                {% for type in types %}
+                                    <a href="#" data-filter="type{{ type.id }}" title="Genre {{ type.name }}">{{ type.name }}</a>{{ (loop.last) ? "&nbsp;&bull; "|raw : "&nbsp;| "|raw }}
+                                {% endfor %}
+                                {% if categories %}
+                                    {% for category in categories %}
+                                        <a href="#" data-filter="category{{ category.id }}" title="Catégorie {{ category.name }}">{{ category.name }}</a>{{ (loop.last) ? "" : "&nbsp;| "|raw }}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% if projects %}
+                    {% if nbpages > 1 %}
+                        <nav aria-label="pagination projects" class="mx-2 mx-md-0 mb-3">
+                            <ul class="pagination pagination-sm justify-content-start justify-content-md-end">
+                                <li class="page-item{{ (currentPage == 1) ? " disabled" : "" }}">
+                                    <a class="page-link" href="{{ path('app_projects_allprojects', {"page":(currentPage == 1 ? 1 : currentPage-1)}) }}" tabindex="-1">Previous</a>
+                                </li>
+                                {% for i in 1..nbpages %}
+                                    <li class="page-item{{ (currentPage == i) ? " active" : "" }}">
+                                        <a class="page-link" href="{{ path('app_projects_allprojects', {"page":i}) }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                <li class="page-item{{ (currentPage == nbpages) ? " disabled" : "" }}">
+                                    <a class="page-link" href="{{ path('app_projects_allprojects', {"page":(currentPage == nbpages ? nbpages : currentPage+1)}) }}">Next</a>
+                                </li>
+                        </ul>
+                    </nav>
+                        {% endif %}
+                    <div id="portfolio-grid" class="row no-gutter" data-aos="fade-up" data-aos-delay="200">
+                    {% for project in projects %}
+                        {% dump(project) %}
+                        <div class="item web col-sm-6 col-md-4 col-lg-4 mb-4 portfolio-sizing">
+                            <a href="{{ path('app_projects_singleproject', {"id":project.id}) }}" class="item-wrap fancybox">
+                                <div class="work-info">
+                                    <h3>{{ project.name }}</h3>
+                                    <span>{{ project.type }}<br><small>{{ project.category }}</small></span>
+                                </div>
+                                <div class="img-square">
+                                    <img class="img-fluid" src="{{ asset('/img/portfolio/' ~ project.files[0]) }}">
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+{#        <div class="site-section">#}
+{#            <div class="container">#}
+
+{#                <div class="owl-carousel testimonial-carousel">#}
+
+{#                    <div class="testimonial-wrap">#}
+{#                        <div class="testimonial">#}
+{#                            <img src="img/person_1.jpg" alt="Image" class="img-fluid">#}
+{#                            <blockquote>#}
+{#                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam necessitatibus incidunt ut officiis#}
+{#                                    explicabo inventore.</p>#}
+{#                            </blockquote>#}
+{#                            <p>&mdash; Jean Hicks</p>#}
+{#                        </div>#}
+{#                    </div>#}
+
+{#                    <div class="testimonial-wrap">#}
+{#                        <div class="testimonial">#}
+{#                            <img src="img/person_2.jpg" alt="Image" class="img-fluid">#}
+{#                            <blockquote>#}
+{#                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam necessitatibus incidunt ut officiis#}
+{#                                    explicabo inventore.</p>#}
+{#                            </blockquote>#}
+{#                            <p>&mdash; Chris Stanworth</p>#}
+{#                        </div>#}
+{#                    </div>#}
+
+{#                </div>#}
+
+{#            </div>#}
+{#        </div>#}
+    </main>
+
+
+
+{% endblock %}

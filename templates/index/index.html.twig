@@ -2,6 +2,14 @@
 
 {% block title %}{{ parent() }} | Accueil{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+
+    {# CSS lightbox #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
+
+{% endblock %}
+
 {% block body %}
 
     <!-- Masthead -->
@@ -160,15 +168,15 @@
         </div>
     </section>
 
-    <!-- Portfolio Section https://mdbootstrap.com/plugins/jquery/gallery/ -->
+    {# Portfolio Section https://mdbootstrap.com/plugins/jquery/gallery/ #}
     <section class="page-section bg-primary" id="portfolio">
         <div class="text-center mb-2 col-10 col-md-12 mx-auto">
             <h2 class="mb-4 text-white">Portfolio</h2>
             <hr class="divider light my-4">
             <h6>
                 <div class="text-white d-inline" id="mix-projects">Mix sélection de projets</div>
-                <span class="font-weight-bold text-white-50">&nbsp;&#8226; </span> {# puce ronde #}
-                <a href="" class="text-white">Voir tous les projets</a>
+                <span class="font-weight-bold text-white-50"> &#8226; </span> {# puce ronde #}
+                <a href="{{ path('app_projects_allprojects') }}" class="text-white d-inline">Voir tous les projets</a>
             </h6>
             {#            <div>#}
 {#                <h5 class="text-white font-weight-bold">#}
@@ -230,7 +238,7 @@
 {% block javascripts %}
     {{ parent() }}
 
-    {# afficher 6 autres projets #}
+    {# renouveler les 6 projets #}
     <script type="text/javascript">const $url = "{{ path('app_index_mixprojects') }}";</script>
     <script src="{{ asset('js/mix-projects.js') }}"></script>
 

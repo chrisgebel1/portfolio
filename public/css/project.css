@@ -1,0 +1,8 @@
+h2 a {
+    color: rgba(255, 255, 255, .7);
+}
+
+h2 a:hover {
+    /*color: #ed3c0d;*/
+    color: #FFFFFF;
+}

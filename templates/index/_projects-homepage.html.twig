@@ -2,21 +2,23 @@
     {% if projects and projects|length > 0 %}
         {% for project in projects %}
             <div class="col-lg-4 col-sm-6 position-relative div-portfolio">
-                <a class="portfolio-box m-2" href="{{ asset('img/portfolio/' ~ project.files[0]) }}"
+                <a class="portfolio-box" href="{{ asset('img/portfolio/' ~ project.files[0]) }}"
+                   data-source="{{ path('app_projects_singleproject', {'id': project.id}) }}"
                    title="{{ project.infoShort }}">
                     <img class="img-fluid img-fluid-home img-fit"
                          src="{{ asset('img/portfolio/' ~ project.files[0]) }}"
                          alt="{{ project.infoShort }}">
-                    {#                                <div class="portfolio-box-caption" {{ (project.type|lower == 'web') ? 'style="background-color:rgba(108, 117, 125, .9);"' }}>#}
-                    <div class="portfolio-box-caption bg-dark">
-                        <div class="project-category text-white-50">
-                            {{ project.type }}
-                        </div>
-                        <div class="project-category">
-                            {{ project.category }}
-                        </div>
-                        <div class="project-name">
-                            {{ project.name }}
+                    <div class="portfolio-box-caption" {{ (project.type|lower == 'web') ? 'style="background-color:rgba(108, 117, 125, .9);"' }}>
+                        <div class="portfolio-box-caption bg-dark">
+                            <div class="project-category text-white-50">
+                                {{ project.type }}
+                            </div>
+                            <div class="project-category">
+                                {{ project.category }}
+                            </div>
+                            <div class="project-name">
+                                {{ project.name }}
+                            </div>
                         </div>
                     </div>
                 </a>

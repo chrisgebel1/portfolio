@@ -67,12 +67,17 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {% if app.session.flashbag.peekAll()|length > 0 %}
+                                <div class="card-body">
+                                    {# Messages Flash #}
+                                    {% include '_messageFlash.html.twig' %}
+                                </div>
+                            {% endif %}
+
+
                         </div>
                     </div>
-                </div>
-                <div class="col-12">
-                    {# Messages Flash #}
-                    {% include '_messageFlash.html.twig' %}
                 </div>
             </div>
         </div>
