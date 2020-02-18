@@ -560,27 +560,27 @@ h6,
 /*    }*/
 /*}*/
 
-.page-item.disabled a, .page-item a, .page-item.active a, .page-item.disabled a {
+.page-item a, .page-item.active a, .page-item.disabled a, .page-item span, .page-item.disabled span, .page-item.active span {
     background-color: rgba(0, 0, 0, 0);
     border: 0;
     color: white;
 }
 
-.page-item.disabled a {
+.page-item.disabled a, .page-item.disabled span {
     background-color: rgba(0, 0, 0, 0) !important;
     opacity: .5;
 }
 
-.page-item.active a {
+.page-item.active a, .page-item.active span {
     background-color: rgba(0, 0, 0, 0) !important;
     color: #ed3c0d !important;
 }
 
-.page-item.active a, .page-item a {
+.page-item.active a, .page-item a, .page-item.active span, .page-item span {
     position: relative;
 }
 
-.page-item.active a:before {
+.page-item.active a:before, .page-item.active span:before {
     content: "";
     position: absolute;
     left: 6px;
@@ -613,4 +613,24 @@ h6,
 
 .max-vh-65 {
     max-height: 65vh;
+}
+
+#search-project {
+    font-size: .8rem;
+}
+
+#filter {
+    cursor: pointer;
+}
+
+.pagination-projects {
+    transform: translateY(7px);
+}
+
+#accordionFilters .card-header {
+    height: 42px;
+}
+
+#accordionFilters .card-body {
+    padding: 6px 20px;
 }

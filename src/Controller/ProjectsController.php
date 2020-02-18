@@ -17,28 +17,27 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProjectsController extends AbstractController
 {
     /**
-     * @Route("/{page}", defaults={"page"=1})
+     * @Route("/")
      * @param ProjectRepository $projectRepository
      * @param TypeRepository $typeRepository
      * @param CategoryRepository $categoryRepository
-     * @param $page
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function allProjects(ProjectRepository $projectRepository, TypeRepository $typeRepository, CategoryRepository $categoryRepository, $page)
+    public function allProjects(
+        ProjectRepository $projectRepository,
+        TypeRepository $typeRepository,
+        CategoryRepository $categoryRepository
+        )
     {
         $limit = 6;
+        $page = "1";
         $currentPage = $page;
+        $typeSelected = null;
 
         $projectsAll = $projectRepository->findBy(
             [],
             ['id'  => 'DESC']
         );
-
-//        $projects = $projectRepository->findBy(
-//            [],
-//            ['id'  => 'DESC'],
-//            $limit
-//        );
 
         $types = $typeRepository->findBy(
             [],
@@ -50,15 +49,95 @@ class ProjectsController extends AbstractController
             ['name' => 'ASC']
         );
 
+
+        if ( isset($_GET['type']) ) {
+            $type = $_GET['type'];
+            if ( !empty($type) && preg_match("/^\d+$/", $type) ) {
+                $typeSelected = $typeRepository->find($type);
+                $projectsAll = $projectRepository->findBy(
+                    [ 'type'    => $typeSelected ],
+                    [ 'name'    => 'ASC' ]
+                );
+            } else {
+                return $this->redirectToRoute('app_projects_allprojects');
+            }
+        }
+
+        if ( isset($_GET['category']) ) {
+            $catGet = $_GET['category'];
+            $d = 'and';
+
+            if ( preg_match("/^(\w+((and\w+)+))$/", $catGet) )
+            {
+
+                if ( strpos($catGet, $d) )
+                {
+                    $tab = explode($d, $catGet, count($categories));
+                    $projects = [];
+
+                    foreach ($tab as $nameCat) {
+                        $idCat = $categoryRepository->findBy(
+                            ['name'   => $nameCat]
+                        );
+
+                        $project = $projectRepository->findBy(
+                            ['category'=>$idCat],
+                            ['category'=>'DESC']
+                        );
+
+                        if (count($project)>0) {
+                            foreach ($project as $p){
+                                array_push($projects, $p);
+                            }
+                        } else {
+                            // $this->addFlash('error', 'La catégorie ' . $idCat. ' n\'existe pas');
+                            return $this->redirectToRoute('app_projects_allprojects');
+                        }
+                    }
+
+                } else {
+                    // $this->addFlash('error', 'Une erreur dans l\'url a été détectée');
+                    return $this->redirectToRoute('app_projects_allprojects');
+                }
+
+            } elseif ( preg_match("/^\w+$/", $catGet) ) {
+                $idCat = $categoryRepository->findBy(
+                    ['name'   => $catGet]
+                );
+
+                $projects = $projectRepository->findBy(
+                    ['category'=>$idCat],
+                    ['category'=>'DESC']
+                );
+
+                if ( count($projects) == 0 ) {
+                    // $this->addFlash('error', 'La catégorie ' . $cat. ' n\'existe pas');
+                    return $this->redirectToRoute('app_projects_allprojects');
+                }
+
+            } else {
+                // $this->addFlash('error', 'Une erreur dans l\'url a été détectée');
+                return $this->redirectToRoute('app_projects_allprojects');
+            }
+            $projectsAll = $projects;
+        }
+
+
         $nbPages = ceil(count($projectsAll) / $limit);
 
-        if ( $page < 1 || !preg_match("/^\d+$/", $page) ) {
-            return $this->redirectToRoute('app_projects_allprojects');
-        } elseif ( $page >= 1 and $page <= $nbPages ) {
-            $currentPage = $page;
-        } elseif ( $page > $nbPages ) {
-            $currentPage = $nbPages;
+        if ( isset($_GET['page']) ) {
+            $page = $_GET['page'];
+            if ( !empty($page) && preg_match("/^\d+$/", $page) ) {
+                if ( $page < 1 ) {
+                    return $this->redirectToRoute('app_projects_allprojects');
+                } elseif ( $page >= 1 and $page <= $nbPages ) {
+                    $currentPage = $page;
+                } elseif ( $page > $nbPages ) {
+                    $currentPage = $nbPages;
+                }
+            }
         }
+
 
         $projects = array_slice($projectsAll, (($currentPage-1)*$limit), $limit);
 
@@ -68,7 +147,7 @@ class ProjectsController extends AbstractController
                 'types'         => $types,
                 'categories'    => $categories,
                 'currentPage'   => $currentPage,
-                'nbpages'       => $nbPages
+                'nbpages'       => $nbPages,
             ]
         );
     }

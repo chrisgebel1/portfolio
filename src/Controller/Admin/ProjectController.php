@@ -405,7 +405,7 @@ class ProjectController extends AbstractController
 
 
     /**
-     * @Route("/ajaxdeleteoneimageproject/{id}/img/{img}", requirements={"id":"\d+", "img":"\d+"})
+     * @Route("/ajaxdeleteoneimageproject/{id}/img/{img}", requirements={"id":"^\d+$", "img":"^\d+$"})
      */
     public function ajaxDeleteOneImageProject(
         EntityManagerInterface $entityManager,

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} | Projets{% endblock %}
+{% block title %}{{ parent() }} | Projet{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -31,14 +31,22 @@
                 </div>
             </div>
             <div class="row align-items-stretch">
-                <div class="col-md-8" data-aos="fade-up">
-                    <img src="{{ asset('img/portfolio/' ~ project.files[0]) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="img-fluid mb-3 max-vh-65">
-                    <div class="row">
+                <div class="col-md-8" data-aos="fade-up" id="single-project">
+                    <div class="img-square mb-3">
+                        <a href="{{ asset('img/portfolio/' ~ project.files[0]) }}" title="{{ project.infoShort }}">
+                        <img src="{{ asset('img/portfolio/' ~ project.files[0]) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="img-fluid max-vh-65">
+                        </a>
+                    </div>
+                    <div class="row mb-md-0 mb-5">
                         {% if project.files|length > 1 %}
                             {% for file in project.files %}
                                 {% if loop.index0 != 0 %}
                                 <div class="col-2">
-                                    <img src="{{ asset('img/portfolio/' ~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="img-fluid">
+                                    <div class="img-square">
+                                        <a href="{{ asset('img/portfolio/' ~ file) }}" title="{{ project.infoShort }}">
+                                        <img src="{{ asset('img/portfolio/' ~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="img-fluid">
+                                        </a>
+                                    </div>
                                 </div>
                                 {% endif %}
                             {% endfor %}
@@ -91,7 +99,9 @@
                                     <h3>{{ moreProject.name }}</h3>
                                     <span>{{ moreProject.category }}</span>
                                 </div>
-                                <img class="img-fluid" src="{{ asset('img/portfolio/' ~ moreProject.files[0]) }}">
+                                <div class="img-square">
+                                    <img class="img-fluid" src="{{ asset('img/portfolio/' ~ moreProject.files[0]) }}">
+                                </div>
                             </a>
                         </div>
                         {% endif %}
@@ -100,43 +110,15 @@
             </div>
         </div>
     {% endif %}
-
-
-
-
-    {#    <div class="site-section pb-0">#}
-{#        <div class="container">#}
-
-{#            <div class="owl-carousel testimonial-carousel">#}
-
-{#                <div class="testimonial-wrap">#}
-{#                    <div class="testimonial">#}
-{#                        <img src="img/person_1.jpg" alt="Image" class="img-fluid">#}
-{#                        <blockquote>#}
-{#                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam necessitatibus incidunt ut#}
-{#                                officiis explicabo inventore.</p>#}
-{#                        </blockquote>#}
-{#                        <p>&mdash; Jean Hicks</p>#}
-{#                    </div>#}
-{#                </div>#}
-
-{#                <div class="testimonial-wrap">#}
-{#                    <div class="testimonial">#}
-{#                        <img src="img/person_2.jpg" alt="Image" class="img-fluid">#}
-{#                        <blockquote>#}
-{#                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam necessitatibus incidunt ut#}
-{#                                officiis explicabo inventore.</p>#}
-{#                        </blockquote>#}
-{#                        <p>&mdash; Chris Stanworth</p>#}
-{#                    </div>#}
-{#                </div>#}
-
-{#            </div>#}
-
-{#        </div>#}
-{#    </div>#}
     </main>
 
 
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('js/magnific_single-project.js') }}"></script>
 
 {% endblock %}

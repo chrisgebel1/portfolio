@@ -5,6 +5,9 @@
 {% block stylesheets %}
     {{ parent() }}
 
+    {# CSS jQuery UI Autocomplete https://jqueryui.com/autocomplete/ #}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     {# Theme CSS perso #}
     <link href="{{ asset('css/projects.css')}}" rel="stylesheet">
 
@@ -20,6 +23,27 @@
 {#        </div>#}
 {#    </header>#}
 
+    {% set typeUrl = null %}
+    {% set categoryUrl = null %}
+    {% set nbCategories = 0 %}
+
+    {% if app.request.query.all|length > 0 %}
+        {% if app.request.query.all['type'] is defined and app.request.query.all['type'] is not null %}
+            {% set typeUrl = app.request.query.all['type'] %}
+            {% for category in categories %}
+                {% if category.type.id == typeUrl %}
+                    {% set nbCategories = nbCategories + 1 %}
+                {% endif %}
+            {% endfor %}
+            {% dump(typeUrl) %}
+            {% dump(nbCategories) %}
+        {% endif %}
+        {% if app.request.query.all['category'] is defined and app.request.query.all['category'] is not null %}
+            {% set categoryUrl = app.request.query.all['category']|getUrlIdFromCat %}
+            {% dump(categoryUrl) %}
+        {% endif %}
+    {% endif %}
+
     <main id="main" class="mb-5">
 
         <div class="site-section pb-0 site-portfolio mb-5">
@@ -30,44 +54,135 @@
                         <p class="mb-0">Voici une sélection des projets réalisés au cours de mon parcours professionnel, quelque soit leur genre !</p>
                     </div>
                 </div>
-                <div class="mx-2 mx-md-0 mb-3">
-                    <div class="text-left text-lg-right" data-aos="fade-up" data-aos-delay="100">
-                        <div id="filters" class="filters">
-                            {% if types %}
-                                <a href="#" data-filter="*" class="active" title="Aucun filtre">Tout</a>{{ "&nbsp;&bull; "|raw }}
-                                {% for type in types %}
-                                    <a href="#" data-filter="type{{ type.id }}" title="Genre {{ type.name }}">{{ type.name }}</a>{{ (loop.last) ? "&nbsp;&bull; "|raw : "&nbsp;| "|raw }}
-                                {% endfor %}
-                                {% if categories %}
-                                    {% for category in categories %}
-                                        <a href="#" data-filter="category{{ category.id }}" title="Catégorie {{ category.name }}">{{ category.name }}</a>{{ (loop.last) ? "" : "&nbsp;| "|raw }}
-                                    {% endfor %}
+
+                <!-- section filtre \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
+                <div class="accordion mb-3" id="accordionFilters">
+                    <div class="card bg-dark border-0 pr-md-2 pl-md-1 pr-0 pl-0">
+                        <div class="card-header p-0 pb-1 d-flex flex-row justify-content-between" id="headingOne">
+                            <div>
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link text-light" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Filtres
+                                    </button>
+                                </h2>
+                                </div>
+                            {% if projects %}
+                                {% if nbpages > 1 %}
+                                    <nav aria-label="pagination projects" class="mx-2 mx-md-0 pagination-projects">
+                                        <ul class="pagination pagination-sm justify-content-start justify-content-md-end">
+                                            <li class="page-item{{ (currentPage == 1) ? " disabled" : "" }}">
+                                                <a class="page-link" href="{{ path('app_projects_allprojects', {"page":(currentPage == 1 ? 1 : currentPage-1)}|merge(app.request.query.all)) }}" tabindex="-1">Previous</a>
+                                            </li>
+                                            {% for i in 1..nbpages %}
+                                                <li class="page-item{{ (currentPage == i) ? " active" : "" }}">
+                                                    <a class="page-link" href="{{ path('app_projects_allprojects', {"page":i}|merge(app.request.query.all)) }}">{{ i }}</a>
+                                                </li>
+                                            {% endfor %}
+                                            <li class="page-item{{ (currentPage == nbpages) ? " disabled" : "" }}">
+                                                <a class="page-link" href="{{ path('app_projects_allprojects', {"page":(currentPage == nbpages ? nbpages : currentPage+1)}|merge(app.request.query.all)) }}">Next</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                {% else %}
+                                    <nav aria-label="pagination projects" class="mx-2 mx-md-0 mb-3">
+                                        <ul class="pagination pagination-sm justify-content-start justify-content-md-end">
+                                            <li class="page-item disabled">
+                                                <span class="page-link">Previous</span>
+                                            </li>
+                                            <li class="page-item active">
+                                                <span class="page-link">1</span>
+                                            </li>
+                                            <li class="page-item disabled">
+                                                <span class="page-link">Next</span>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 {% endif %}
                             {% endif %}
                         </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFilters">
+                            <div class="card-body">
+
+                                <!-- filtres \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
+                                <div class="mx-2 mx-md-0 mb-3">
+                                    <ul class="nav flex-column mt-3">
+                                        <li class="nav-item mb-3">
+                                            <form action="">
+                                                <input class="form-control form-control-sm col-md-4 col-sm-6 col-12" type="text" id="search-project" name="search-project" autocomplete="off" placeholder="Rechercher un projet&hellip;">
+                                            </form>
+                                        </li>
+                                        {% if types|length > 0 %}
+                                            <li class="nav-item mb-3">
+                                                <div class="mr-2 d-inline-block">
+                                                    Types :
+                                                </div>
+                                                {% for type in types %}
+                                                    <div class="form-check d-inline-block mr-3">
+                                                        <input class="form-check-input" type="radio" value="{{ type.name }}" id="defaultCheckType{{ type.id }}" name="type-select"
+                                                                {% if typeUrl is not null and typeUrl == type.id %}
+                                                                    checked
+                                                                {% endif %}
+                                                        >
+                                                        <label class="form-check-label" for="defaultCheckType{{ type.id }}">
+                                                            {{ type.name }}
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+                                            </li>
+                                        {% endif %}
+
+                                        {% if categories|length > 0 %}
+                                            <li class="nav-item mb-3">
+                                                <div class="mr-2 d-inline-block">
+                                                    Catégories :
+                                                </div>
+                                                {% for category in categories %}
+                                                    {% set statusCat = '' %}
+                                                    {% if categoryUrl is not null %}
+                                                        {% if (categoryUrl is iterable and category.name in categoryUrl) %}
+                                                            {% set statusCat = 'checked' %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if nbCategories == 1 %}
+                                                        {% set statusCat = 'checked' %}
+                                                    {% endif %}
+                                                    {% if typeUrl is not null %}
+                                                        {% if category.type.id == typeUrl %}
+                                                            <div class="form-check d-inline-block">
+                                                                <input class="form-check-input" type="checkbox" value="" id="defaultCheckCategory{{ category.id }}" {{ statusCat }}>
+                                                                <label class="form-check-label mr-3" for="defaultCheckCategory{{ category.id }}">
+                                                                    {{ category.name }}
+                                                                </label>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <div class="form-check d-inline-block">
+                                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheckCategory{{ category.id }}" {{ statusCat }}>
+                                                            <label class="form-check-label mr-3" for="defaultCheckCategory{{ category.id }}">
+                                                                {{ category.name }}
+                                                            </label>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </li>
+                                        {% endif %}
+                                        <li class="nav-item">
+                                            <span class="btn btn-light btn-sm" aria-disabled="true" id="filter">Filtrer</span>
+                                            <a href="{{ path('app_projects_allprojects') }}" class="btn btn-primary btn-sm" aria-disabled="true">Reset</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- fin section filtre \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
+
                 {% if projects %}
-                    {% if nbpages > 1 %}
-                        <nav aria-label="pagination projects" class="mx-2 mx-md-0 mb-3">
-                            <ul class="pagination pagination-sm justify-content-start justify-content-md-end">
-                                <li class="page-item{{ (currentPage == 1) ? " disabled" : "" }}">
-                                    <a class="page-link" href="{{ path('app_projects_allprojects', {"page":(currentPage == 1 ? 1 : currentPage-1)}) }}" tabindex="-1">Previous</a>
-                                </li>
-                                {% for i in 1..nbpages %}
-                                    <li class="page-item{{ (currentPage == i) ? " active" : "" }}">
-                                        <a class="page-link" href="{{ path('app_projects_allprojects', {"page":i}) }}">{{ i }}</a>
-                                    </li>
-                                {% endfor %}
-                                <li class="page-item{{ (currentPage == nbpages) ? " disabled" : "" }}">
-                                    <a class="page-link" href="{{ path('app_projects_allprojects', {"page":(currentPage == nbpages ? nbpages : currentPage+1)}) }}">Next</a>
-                                </li>
-                        </ul>
-                    </nav>
-                        {% endif %}
                     <div id="portfolio-grid" class="row no-gutter" data-aos="fade-up" data-aos-delay="200">
                     {% for project in projects %}
-                        {% dump(project) %}
                         <div class="item web col-sm-6 col-md-4 col-lg-4 mb-4 portfolio-sizing">
                             <a href="{{ path('app_projects_singleproject', {"id":project.id}) }}" class="item-wrap fancybox">
                                 <div class="work-info">
@@ -120,5 +235,15 @@
     </main>
 
 
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script type="text/javascript">let $source = '{{ path('app_index_searchproject') }}';</script>
+    <script src="{{ asset('js/filter-search_projects_front.js') }}"></script>
 
 {% endblock %}

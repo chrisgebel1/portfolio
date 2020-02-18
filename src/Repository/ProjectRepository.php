@@ -33,6 +33,20 @@ class ProjectRepository extends ServiceEntityRepository
             ;
     }
 
+/* pas utilisé */
+    public function searchByCatAndType($cat, $type)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.category.name LIKE :cat')
+            ->setParameter('cat', $cat)
+            ->andWhere('p.type.id LIKE :type')
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getResult()
+            ;
+
+    }
+
 
     // /**
     //  * @return Project[] Returns an array of Project objects
