@@ -64,7 +64,7 @@ $( document ).ready(function() {
 
             axios.get($url).then( function(response){
                 // console.log(response);
-                if ( response.status == 200 )
+                if ( response.status === 200 )
                 {
                     $( "#imageIndex" + $indexImage ).remove();
                 }

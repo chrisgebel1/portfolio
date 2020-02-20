@@ -24,25 +24,6 @@
 {#    </header>#}
 
     {% set typeUrl = null %}
-    {% set categoryUrl = null %}
-    {% set nbCategories = 0 %}
-
-    {% if app.request.query.all|length > 0 %}
-        {% if app.request.query.all['type'] is defined and app.request.query.all['type'] is not null %}
-            {% set typeUrl = app.request.query.all['type'] %}
-            {% for category in categories %}
-                {% if category.type.id == typeUrl %}
-                    {% set nbCategories = nbCategories + 1 %}
-                {% endif %}
-            {% endfor %}
-            {% dump(typeUrl) %}
-            {% dump(nbCategories) %}
-        {% endif %}
-        {% if app.request.query.all['category'] is defined and app.request.query.all['category'] is not null %}
-            {% set categoryUrl = app.request.query.all['category']|getUrlIdFromCat %}
-            {% dump(categoryUrl) %}
-        {% endif %}
-    {% endif %}
 
     <main id="main" class="mb-5">
 
@@ -50,7 +31,7 @@
             <div class="container">
                 <div class="mx-2 mx-md-0 mb-3">
                     <div class="mb-lg-0" data-aos="fade-up">
-                        <h2>Mes Projets</h2>
+                        <h2><a href="{{ path('app_projects_allprojects') }}">Mes Projets</a></h2>
                         <p class="mb-0">Voici une sélection des projets réalisés au cours de mon parcours professionnel, quelque soit leur genre !</p>
                     </div>
                 </div>
@@ -84,7 +65,7 @@
                                         </ul>
                                     </nav>
                                 {% else %}
-                                    <nav aria-label="pagination projects" class="mx-2 mx-md-0 mb-3">
+                                    <nav aria-label="pagination projects" class="mx-2 mx-md-0 pagination-projects">
                                         <ul class="pagination pagination-sm justify-content-start justify-content-md-end">
                                             <li class="page-item disabled">
                                                 <span class="page-link">Previous</span>
@@ -119,7 +100,7 @@
                                                 {% for type in types %}
                                                     <div class="form-check d-inline-block mr-3">
                                                         <input class="form-check-input" type="radio" value="{{ type.name }}" id="defaultCheckType{{ type.id }}" name="type-select"
-                                                                {% if typeUrl is not null and typeUrl == type.id %}
+                                                                {% if app.request.uri|getUrlIdFromTyp is not null and type.id == app.request.uri|getUrlIdFromTyp and 'type' in app.request.uri %}
                                                                     checked
                                                                 {% endif %}
                                                         >
@@ -138,13 +119,11 @@
                                                 </div>
                                                 {% for category in categories %}
                                                     {% set statusCat = '' %}
-                                                    {% if categoryUrl is not null %}
-                                                        {% if (categoryUrl is iterable and category.name in categoryUrl) %}
+                                                    {% if (app.request.uri|getUrlIdFromCat is not null and 'category' in app.request.uri ) %}
+                                                        {% if (app.request.uri|getUrlIdFromCat is iterable and category.id in app.request.uri|getUrlIdFromCat) %}
                                                             {% set statusCat = 'checked' %}
+                                                        {% else %}
                                                         {% endif %}
-                                                    {% endif %}
-                                                    {% if nbCategories == 1 %}
-                                                        {% set statusCat = 'checked' %}
                                                     {% endif %}
                                                     {% if typeUrl is not null %}
                                                         {% if category.type.id == typeUrl %}
@@ -243,7 +222,7 @@
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <script type="text/javascript">let $source = '{{ path('app_index_searchproject') }}';</script>
-    <script src="{{ asset('js/filter-search_projects_front.js') }}"></script>
+    {# pour la sidebar recherche, tri affichage des projets #}
+    <script type="module" src="{{ asset('js/filter-search_projects_front.js') }}"></script>
 
 {% endblock %}

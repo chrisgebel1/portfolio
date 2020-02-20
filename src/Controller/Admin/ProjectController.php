@@ -66,7 +66,7 @@ class ProjectController extends AbstractController
     {
 
         if ( is_null($type) ) {
-            $this->redirectToRoute('app_admin_project_index');
+            return $this->redirectToRoute('app_admin_project_index');
         }
 
         $types = $typeRepository->findBy(
@@ -150,10 +150,13 @@ class ProjectController extends AbstractController
                                     $cat)
     {
         $nameType = '';
-        $d = 'and';
+        $projects = [];
+        $msgError = null;
 
         if ( is_null($cat) ) {
             $this->redirectToRoute('app_admin_project_index');
+        } else {
+            $cat = explode(',', $cat);
         }
 
         $types = $typeRepository->findBy(
@@ -166,15 +169,9 @@ class ProjectController extends AbstractController
             ['name'=>'ASC']
         );
 
-        if ( preg_match("/^(\d+((and\d+)+))$/", $cat) )
-        {
-
-            if ( strpos($cat, $d) )
-            {
-                $tab = explode($d, $cat, count($categories));
-                $projects = [];
-
-                foreach ($tab as $idCat) {
+        if ( is_array($cat) ) {
+            foreach ( $cat as $idCat) {
+                if ( is_numeric($idCat) ) {
                     $project = $projectRepository->findBy(
                         ['category'=>$idCat],
                         ['category'=>'DESC']
@@ -185,30 +182,25 @@ class ProjectController extends AbstractController
                             array_push($projects, $p);
                         }
                     } else {
-                        $this->addFlash('error', 'La catégorie ' . $idCat. ' n\'existe pas');
+                        $msgError = 'La catégorie ' . $idCat. ' n\'existe pas';
+                        $this->addFlash('error', $msgError);
                     }
+
+                } else {
+                    $msgError = 'La catégorie ' . $idCat. ' n\'existe pas';
+                    $this->addFlash('error', $msgError);
                 }
-
-            } else {
-                $this->addFlash('error', 'Une erreur dans l\'url a été détectée');
-                return $this->redirectToRoute('app_admin_project_index');
-            }
-
-        } elseif ( preg_match("/^\d+$/", $cat) ) {
-            $projects = $projectRepository->findBy(
-                ['category'=>$cat],
-                ['category'=>'DESC']
-            );
-
-            if ( count($projects) == 0 ) {
-                $this->addFlash('error', 'La catégorie ' . $cat. ' n\'existe pas');
-                return $this->redirectToRoute('app_admin_project_index');
             }
 
         } else {
-            $this->addFlash('error', 'Une erreur dans l\'url a été détectée');
+            $msgError = 'Une erreur dans l\'url a été détectée';
+            $this->addFlash('error', $msgError);
+        }
+
+        if ( !is_null($msgError) ) {
             return $this->redirectToRoute('app_admin_project_index');
         }
+
 
         return $this->render('admin/project.html.twig',
             [

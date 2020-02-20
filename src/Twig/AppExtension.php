@@ -33,8 +33,8 @@ class AppExtension extends AbstractExtension
         $id = [];
         $temp = preg_replace('/^.+\/+/', '', $url);
 
-        if ( preg_match('/(and)/', $temp) ) {
-            $id = explode('and', $temp);
+        if ( preg_match('/(,)/', $temp) ) {
+            $id = explode(',', $temp);
         } else {
             $id[] = $temp;
         }
