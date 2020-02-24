@@ -125,18 +125,18 @@ class ProjectsController extends AbstractController
 
         $nbPages = ceil(count($projectsAll) / $limit);
 
-//        if ( isset($_GET['page']) ) {
-//            $page = $_GET['page'];
-//            if ( !empty($page) && preg_match("/^\d+$/", $page) ) {
-//                if ( $page < 1 ) {
-//                    return $this->redirectToRoute('app_projects_allprojects');
-//                } elseif ( $page >= 1 and $page <= $nbPages ) {
-//                    $currentPage = $page;
-//                } elseif ( $page > $nbPages ) {
-//                    $currentPage = $nbPages;
-//                }
-//            }
-//        }
+        if ( isset($_GET['page']) ) {
+            $page = $_GET['page'];
+            if ( !empty($page) && preg_match("/^\d+$/", $page) ) {
+                if ( $page < 1 ) {
+                    return $this->redirectToRoute('app_projects_allprojects');
+                } elseif ( $page >= 1 and $page <= $nbPages ) {
+                    $currentPage = $page;
+                } elseif ( $page > $nbPages ) {
+                    $currentPage = $nbPages;
+                }
+            }
+        }
 
         $projects = array_slice($projectsAll, (($currentPage-1)*$limit), $limit);
 
@@ -161,7 +161,7 @@ class ProjectsController extends AbstractController
         $type)
     {
         $limit = 6;
-        $page = "1";
+        $page = 1;
         $currentPage = $page;
         $typeSelected = null;
 
@@ -192,6 +192,21 @@ class ProjectsController extends AbstractController
         );
 
         $nbPages = ceil(count($projects) / $limit);
+
+        if ( isset($_GET['page']) ) {
+            $page = $_GET['page'];
+            if ( !empty($page) && preg_match("/^\d+$/", $page) ) {
+                if ( $page < 1 ) {
+                    return $this->redirectToRoute('app_projects_allprojects');
+                } elseif ( $page >= 1 and $page <= $nbPages ) {
+                    $currentPage = $page;
+                } elseif ( $page > $nbPages ) {
+                    $currentPage = $nbPages;
+                }
+            }
+        }
+
+        $projects = array_slice($projects, (($currentPage-1)*$limit), $limit);
 
         return $this->render('projects/all-projects.html.twig',
             [
@@ -262,6 +277,21 @@ class ProjectsController extends AbstractController
         }
 
         $nbPages = ceil(count($projects) / $limit);
+
+        if ( isset($_GET['page']) ) {
+            $page = $_GET['page'];
+            if ( !empty($page) && preg_match("/^\d+$/", $page) ) {
+                if ( $page < 1 ) {
+                    return $this->redirectToRoute('app_projects_allprojects');
+                } elseif ( $page >= 1 and $page <= $nbPages ) {
+                    $currentPage = $page;
+                } elseif ( $page > $nbPages ) {
+                    $currentPage = $nbPages;
+                }
+            }
+        }
+
+        $projects = array_slice($projects, (($currentPage-1)*$limit), $limit);
 
         return $this->render('projects/all-projects.html.twig',
             [

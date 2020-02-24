@@ -62,12 +62,6 @@ class ProjectsHome
                 }
             }
             shuffle($selectProjects); // mélange l'ordre des projets sélectionnés
-
-//            $toto=[];
-//            foreach ( $projects as $project ) {
-//                $toto[] = $project->getName();
-//            }
-//            dump($toto);die();
         }
 
         return $selectProjects;

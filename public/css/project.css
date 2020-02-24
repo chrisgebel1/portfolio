@@ -7,19 +7,6 @@ h2 a:hover {
     color: #FFFFFF;
 }
 
-.img-square {
-    position:relative;
-    overflow:hidden;
-    padding-bottom:100%;
-}
-
-.img-square img {
-    width: 100%;
-    height: 100%;
-    position:absolute;
-    object-fit: cover;
-}
-
 /* magnific popup */
 .image-source-link {
     color: #98C3D1;

@@ -1,3 +1,7 @@
+:root {
+	--background-projects-front: #212529;
+}
+
 body {
 	position: relative;
 }

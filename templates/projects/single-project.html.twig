@@ -32,7 +32,7 @@
             </div>
             <div class="row align-items-stretch">
                 <div class="col-md-8" data-aos="fade-up" id="single-project">
-                    <div class="img-square mb-3">
+                    <div class="mb-3">
                         <a href="{{ asset('img/portfolio/' ~ project.files[0]) }}" title="{{ project.infoShort }}">
                         <img src="{{ asset('img/portfolio/' ~ project.files[0]) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="img-fluid">
                         </a>
@@ -42,7 +42,7 @@
                             {% for file in project.files %}
                                 {% if loop.index0 != 0 %}
                                 <div class="col-2">
-                                    <div class="img-square">
+                                    <div>
                                         <a href="{{ asset('img/portfolio/' ~ file) }}" title="{{ project.infoShort }}">
                                         <img src="{{ asset('img/portfolio/' ~ file) }}" alt="{{ project.infoShort }}" title="{{ project.infoShort }}" class="img-fluid">
                                         </a>

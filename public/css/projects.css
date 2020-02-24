@@ -13,7 +13,7 @@ body {
     font-family: "Inconsolata", monosapce;
     /*color: #0d1e2d;*/
     color: white;
-    background-color: #212529;
+    background-color: var(--background-projects-front);
 }
 
 a {
@@ -89,6 +89,7 @@ h6,
     display: block;
     position: relative;
     overflow: hidden;
+    background-color: var(--background-projects-front);
 }
 
 .item .item-wrap:after {
@@ -157,8 +158,9 @@ h6,
 }
 
 .item .item-wrap:hover img {
-    -webkit-transform: scale(1.05);
-    transform: scale(1.05);
+    /*-webkit-transform: scale(1.05);*/
+    /*transform: scale(1.05);*/
+    object-fit: contain;
 }
 
 .item .item-wrap:hover:after {

@@ -52,15 +52,24 @@
                                     <nav aria-label="pagination projects" class="mx-2 mx-md-0 pagination-projects">
                                         <ul class="pagination pagination-sm justify-content-start justify-content-md-end">
                                             <li class="page-item{{ (currentPage == 1) ? " disabled" : "" }}">
-                                                <a class="page-link" href="{{ path('app_projects_allprojects', {"page":(currentPage == 1 ? 1 : currentPage-1)}|merge(app.request.query.all)) }}" tabindex="-1">Previous</a>
+                                                <a class="page-link" href="{{
+                                                    path(app.request.attributes.get('_route'),
+                                                    app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'page': (currentPage == 1 ? 1 : currentPage-1)}) ) }}" tabindex="-1">
+                                                    Previous</a>
                                             </li>
                                             {% for i in 1..nbpages %}
                                                 <li class="page-item{{ (currentPage == i) ? " active" : "" }}">
-                                                    <a class="page-link" href="{{ path('app_projects_allprojects', {"page":i}|merge(app.request.query.all)) }}">{{ i }}</a>
+                                                    <a class="page-link" href="{{
+                                                        path(app.request.attributes.get('_route'),
+                                                        app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'page': i}) ) }}">
+                                                        {{ i }}</a>
                                                 </li>
                                             {% endfor %}
                                             <li class="page-item{{ (currentPage == nbpages) ? " disabled" : "" }}">
-                                                <a class="page-link" href="{{ path('app_projects_allprojects', {"page":(currentPage == nbpages ? nbpages : currentPage+1)}|merge(app.request.query.all)) }}">Next</a>
+                                                <a class="page-link" href="{{
+                                                    path(app.request.attributes.get('_route'),
+                                                    app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'page': (currentPage == nbpages ? nbpages : currentPage+1)}) ) }}">
+                                                    Next</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -162,7 +171,7 @@
                 {% if projects %}
                     <div id="portfolio-grid" class="row no-gutter" data-aos="fade-up" data-aos-delay="200">
                     {% for project in projects %}
-                        <div class="item web col-sm-6 col-md-4 col-lg-4 mb-4 portfolio-sizing">
+                        <div class="item web col-sm-6 col-md-4 col-lg-4 mb-4">
                             <a href="{{ path('app_projects_singleproject', {"id":project.id}) }}" class="item-wrap fancybox">
                                 <div class="work-info">
                                     <h3>{{ project.name }}</h3>
