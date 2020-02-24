@@ -8,5 +8,6 @@
 }
 
 header.mastheadBO, header.mastheadSimple {
-    padding-top: 10rem;
+    /*padding-top: 10rem;*/
+    padding-top: 135px;
 }

@@ -1,5 +1,15 @@
+#content-projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 1rem;
+}
+
+.flash-message {
+    grid-column: 1 / -1; /* -1 pour span jusqu'à la dernière colonne */
+}
+
 .card {
-    width: 14rem;
+    /*width: 14rem;*/
     height: 26rem;
     overflow: hidden;
 }

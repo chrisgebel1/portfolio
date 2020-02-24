@@ -104,14 +104,17 @@
                         </div>
                     </div>
 
-                    <div role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 d-flex flex-wrap justify-content-center" id="content-projects">
+{#                    <div role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 d-flex flex-wrap justify-content-center" id="content-projects">#}
+                    <div role="main" class="col-md-10 ml-sm-auto col-sm-12 px-4" id="content-projects">
 
                         {# Messages Flash #}
-                        {% include '_messageFlash.html.twig' %}
+                        {% if app.session.flashBag.peekAll|length > 0 %}
+                            {% include '_messageFlash.html.twig' %}
+                        {% endif %}
 
                         {% if projects is iterable %}
                             {% for project in projects %}
-                                    <div class="card mb-4 mx-3 card{{ project.type.name }}">
+                                    <div class="card card{{ project.type.name }}">
                                         <div class="card-img-top">
                                             {% for file in project.files %}
                                                 {% if file == project.files|first %}

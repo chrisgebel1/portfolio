@@ -611,10 +611,6 @@ h6,
     color: #ed3c0d !important;
 }
 
-.max-vh-65 {
-    max-height: 65vh;
-}
-
 #search-project {
     font-size: .8rem;
 }
